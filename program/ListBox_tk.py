@@ -13,17 +13,13 @@ pingfile = settings.pingfile
 
 Select_Student = ""
 Select_Number = 0
+select_course = ""
+select_year = ""
+time = ""
 
 # 2次元配列のとおりに、gridでレイアウトを作成する
-LAYOUT = [
-    ['1', '2', '3', '4', '5'],
-    ['6', '7', '8', '9', '10'],
-    ['11', '12', '13', '14', '15'],
-    ['16', '17', '18', '19', 'x'],
-    ['20', '21', '22', '23', '24'],
-    ['25', '26', '27', '28', '29'],
-    ['30', '31', '32', '33', '34']
-]
+
+LAYOUT = settings.LAYOUT
 
 buttons = []
 
@@ -39,17 +35,17 @@ class Seat(ttk.Frame): # リストボックスのクラス
         style = ttk.Style()
         style.theme_use('alt')
         # ボタンのスタイルを上書き
-        style.configure('MyWidget.TButton', font=('Helvetica', 20), background='#00DD00')
+        style.configure('MyWidget.TButton', font=('Helvetica', 20), background='#32CD32')
 
         style2 = ttk.Style()
         style2.theme_use('alt')
         # ボタンのスタイルを上書き
-        style2.configure('office.TButton', font=('Helvetica', 20), background='#FFFFFF')
+        style2.configure('office.TButton', font=('Helvetica', 20), background='#D3D3D3')
 
         style3 = ttk.Style()
         style3.theme_use('alt')
         # ボタンのスタイルを上書き
-        style3.configure('MyWidget2.TButton', font=('Helvetica', 20), background='#FF0000')
+        style3.configure('MyWidget2.TButton', font=('Helvetica', 20), background='#DC143C')
 
     def create_widgets(self):
         """ウィジェットの作成."""
@@ -90,6 +86,17 @@ class Seat(ttk.Frame): # リストボックスのクラス
         self.master.columnconfigure(0, weight=1)
         self.master.rowconfigure(0, weight=1)
 
+        # menubarの大元（コンテナ）の作成と設置
+        # 
+        # menu_bar = Menu(self)
+        # self.config(menu = menu_bar)
+        # file_menu = Menu(menu_bar, tearoff=0)
+        # file_menu.add_command(label='New')
+        # file_menu.add_separator()
+        # file_menu.add_command(label='Exit')
+        # menu_bar.add_cascade(label='Files', menu=file_menu)
+        # 
+
     def click_option(self, event):
         global Select_Number
         Select_Number = int(event.widget.cget("text"))
@@ -103,15 +110,12 @@ class Seat(ttk.Frame): # リストボックスのクラス
         #ウィジェットの作成、配置
         self.dialog = Toplevel(self)
         self.dialog.title("生徒リスト")
-        self.dialog.geometry("860x850")
+        self.dialog.geometry("880x870")
         self.dialog.resizable(width=False, height=False)
         self.dialog.grab_set()
 
         font1 = font.Font(size=20, weight='bold')
-        self.label1 = Label(self.dialog, text="""
-        [1] 学年, [2] コースを選んで A のボタンを押してください。
-        [3] 名前 の自分の名前を選んで B のボタンを押して下さい。
-        """, font = font1, anchor='e', justify='left')
+        self.label1 = Label(self.dialog, text= settings.text_set, font = font1, anchor='e', justify='left')
         self.label1.grid(column=0, row=0, columnspan=2)
 
         font2 = font.Font(size=20, weight='bold')
@@ -150,7 +154,7 @@ class Seat(ttk.Frame): # リストボックスのクラス
         
 
     def selectCY(self):
-        global choose_list
+        global choose_list, select_course, select_year
         # 選択されている数値インデックスを含むリストを取得
         itemIdxList1 =  self.listcoursebox.curselection()
         itemIdxList2 =  self.listyearbox.curselection()
@@ -167,7 +171,7 @@ class Seat(ttk.Frame): # リストボックスのクラス
                     self.selectbox.insert("end", i)
 
     def selectNAME(self):
-        global choose_list, Select_Student, Select_Number
+        global choose_list, Select_Student, Select_Number, select_course, select_year
         SeatNumber.New_day_book()
         # 選択されている数値インデックスを含むリストを取得
         itemIdxList =  self.selectbox.curselection()
@@ -177,36 +181,65 @@ class Seat(ttk.Frame): # リストボックスのクラス
             self.dialog.destroy()
             Select_Student = select_name
             (buttons[Select_Number - 1])['style'] = 'MyWidget2.TButton'
-            SeatNumber.append_time_in(Select_Student, Select_Number)
+            SeatNumber.append_time_in(Select_Student, Select_Number, select_year, select_course)
 
     def OpenDialog(self): # 席を開けるときのダイアログ
         #ウィジェットの作成、配置
+        global Select_Number, Select_Student
         self.dialog = Toplevel(self)
-        self.dialog.title("座席コンフィグ")
-        self.dialog.geometry("440x200")
+        self.dialog.title(f"{Select_Number}番の席")
+        self.dialog.geometry("580x200")
         self.dialog.resizable(width=False, height=False)
         self.dialog.grab_set()
 
         font1 = font.Font(size=20, weight='bold')
-        self.label1 = Label(self.dialog, text="""
-        この席を開けますか?
+        Select_Student = SeatNumber.give_name(Select_Number)
+        self.label1 = Label(self.dialog, text=f"""
+        "{Select_Student}"さん
+        この席を空けますか?
         """, font = font1, anchor='w')
-        self.label1.grid(column=0, row=0, columnspan=3)
+        self.label1.grid(column=0, row=1, columnspan= 2)
 
         button_yes = ttk.Button(self.dialog, text = "はい" ,command=self.selectYes, style="office.TButton")
-        button_yes.grid(column=0, row=1, sticky=(N, S, E, W))
+        button_yes.grid(column=0, row=2)
 
         button_no = ttk.Button(self.dialog, text = "いいえ" ,command=self.selectNo, style="office.TButton")
-        button_no.grid(column=2, row=1, sticky=(N, S, E, W))
+        button_no.grid(column=2, row=2)
 
     def selectYes(self):
-        global Select_Number
+        global Select_Number, Select_Student, time
         self.dialog.destroy()
         (buttons[Select_Number - 1])['style'] = 'MyWidget.TButton'
-        SeatNumber.leave_seat_time(Select_Number)
+        time = SeatNumber.leave_seat_time(Select_Student, Select_Number)
+        self.OpenDialog2()
     
     def selectNo(self):
         self.dialog.destroy()
+
+    def OpenDialog2(self): # 席を開けるときのダイアログ
+        #ウィジェットの作成、配置
+        global Select_Number, Select_Student, time
+        self.dialog = Toplevel(self)
+        self.dialog.title(f"{Select_Number}番の席")
+        self.dialog.geometry("370x300")
+        self.dialog.resizable(width=False, height=False)
+        self.dialog.grab_set()
+
+        font1 = font.Font(size=20, weight='bold')
+        self.label1 = Label(self.dialog, text=f"""
+        "{Select_Student}"さん
+        今日の勉強時間は
+         {time} です。
+        お疲れ様でした。
+        """, font = font1, anchor='w')
+        self.label1.grid(column=0, row=1, columnspan= 2)
+
+        button_fin = ttk.Button(self.dialog, text = "終了" ,command=self.selectfin, style="office.TButton")
+        button_fin.grid(column=0, row=2,columnspan= 2)
+
+    def selectfin(self):
+        self.dialog.destroy()
+
 
 
 def main():

@@ -35,7 +35,6 @@ student_list_keys = list(student_list[0].keys()) # Excel の表のキー取得
 for i in student_list:
     t = str(i[student_list_keys[0]])
     School_year_ID.append(t[0:2])
-    
     course.append(str(i[student_list_keys[7]]))
 
 course = list(set(course))
@@ -43,8 +42,9 @@ School_year_ID = list(set(School_year_ID))
 School_year_ID.sort()
 
 
-# 参考: https://gammasoft.jp/blog/read-rows-of-excel-sheet-using-python/
 
+# 参考: https://gammasoft.jp/blog/read-rows-of-excel-sheet-using-python/
+"""
 def choose_course(number): # 選択するコースのリストの要素数
     choose_course = course[number]
     for i in student_list:
@@ -75,6 +75,7 @@ def choose_yearname(name): # 選択する学年のリストの要素数
     for i in student_list:
         if str(i[student_list_keys[0]]).startswith(choose_year):
           choose_list.append(i) 
+"""
 
 def choose_CYname(name1, name2): # 選択するコース,学年のリストの要素数
     global choose_list
