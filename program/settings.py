@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 # デフォルトの設定を以下に記載する
 # Excel ファイルのパス
-Path = "../生徒名簿.xlsx"
+Path = '../生徒名簿.xlsx'
 
 # 学生リスト
 student_list = []

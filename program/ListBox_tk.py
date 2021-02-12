@@ -1,10 +1,13 @@
 # -*- coding:utf-8 -*-
 from tkinter import *
+import os
+import tkinter.filedialog
 from tkinter import font
 from tkinter import ttk
 import Sort_Students
 import settings
 import SeatNumber
+import importlib
 
 height = settings.height
 length = settings.length
@@ -16,6 +19,19 @@ Select_Number = 0
 select_course = ""
 select_year = ""
 time = ""
+
+path = settings.Path # ファイルのパス
+
+# 学生リスト
+student_list = settings.student_list
+# コースのリスト
+course = settings.course
+# 学年IDのリスト
+School_year_ID = settings.School_year_ID
+# 学年のリスト
+School_year = settings.School_year_tpl
+# ソートされた結果のリスト
+choose_list = settings.choose_list
 
 # 2次元配列のとおりに、gridでレイアウトを作成する
 
@@ -29,6 +45,11 @@ class Seat(ttk.Frame): # リストボックスのクラス
         super().__init__(master)
         self.create_style()
         self.create_widgets()
+
+    def reload_modules(self):
+        importlib.reload(settings)
+        importlib.reload(Sort_Students)
+        importlib.reload(SeatNumber)
 
     def create_style(self):
         """ボタン、ラベルのスタイルを変更."""
@@ -46,6 +67,11 @@ class Seat(ttk.Frame): # リストボックスのクラス
         style3.theme_use('alt')
         # ボタンのスタイルを上書き
         style3.configure('MyWidget2.TButton', font=('Helvetica', 20), background='#DC143C')
+
+        style4 = ttk.Style()
+        style4.theme_use('alt')
+        # ボタンのスタイルを上書き
+        style4.configure('office2.TButton', font=('Helvetica', 10), background='#D3D3D3')
 
     def create_widgets(self):
         """ウィジェットの作成."""
@@ -87,15 +113,58 @@ class Seat(ttk.Frame): # リストボックスのクラス
         self.master.rowconfigure(0, weight=1)
 
         # menubarの大元（コンテナ）の作成と設置
-        # 
-        # menu_bar = Menu(self)
-        # self.config(menu = menu_bar)
-        # file_menu = Menu(menu_bar, tearoff=0)
-        # file_menu.add_command(label='New')
-        # file_menu.add_separator()
-        # file_menu.add_command(label='Exit')
-        # menu_bar.add_cascade(label='Files', menu=file_menu)
-        # 
+        menubar = Menu(self)
+        file_menu = Menu(menubar, tearoff=0)
+        menubar.add_cascade(label="設定", menu=file_menu)
+        file_menu.add_command(label="生徒名簿の設定", command=self.onOpenSetting, accelerator="Ctrl+O")
+        self.master.config(menu=menubar)
+        self.bind_all("<Control-o>", self.onOpenSetting)
+
+    def onOpenSetting(self, event=None):
+        self.reload_modules()
+        self.dialog = Toplevel(self)
+        self.dialog.title(f"生徒名簿の設定")
+        self.dialog.geometry("480x150")
+        self.dialog.resizable(width=False, height=False)
+        self.dialog.grab_set()
+
+        font1 = font.Font(size=10, weight='bold')
+        self.label1 = Label(self.dialog, text=f"""
+        生徒名簿の Excel ファイルを指定してください。
+        """, font = font1, anchor='w')
+        self.label1.grid(column=0, row=1, columnspan= 2)
+        button_file = ttk.Button(self.dialog, text = "開く" , style="office2.TButton")
+        button_file.bind('<Button-1>', func = self.file_dialog)
+        button_file.grid(column=2, row=1)
+
+        self.file_name = StringVar()
+        self.file_name.set(settings.Path)
+        self.label2 = Label(self.dialog, textvariable=self.file_name, font=('Helvetica', 10))
+        self.label2.grid(column=0, row=2, columnspan= 3)
+
+        self.label2 = Label(self.dialog, textvariable="", font=('Helvetica', 10))
+        self.label2.grid(column=0, row=3, columnspan= 3)
+
+        button_fin = ttk.Button(self.dialog, text = "決定" , style="office2.TButton")
+        button_fin.bind('<Button-1>', func = self.select_filename)
+        button_fin.grid(column=0, row=5, columnspan= 3)
+    
+    def file_dialog(self, event):
+        fTyp = [("Excel", "xlsx")]
+        iDir = os.path.abspath(os.path.dirname(__file__))
+        file_name = tkinter.filedialog.askopenfilename(filetypes=fTyp, initialdir=iDir)
+        if len(file_name) == 0:
+            self.file_name.set(settings.Path)
+        else:
+            self.file_name.set(file_name)
+
+    def select_filename(self, event):
+        filename = self.file_name.get()
+        SeatNumber.write_filename(settings.Path, filename)
+        self.dialog.destroy()
+
+
+         
 
     def click_option(self, event):
         global Select_Number
@@ -108,6 +177,7 @@ class Seat(ttk.Frame): # リストボックスのクラス
         
     def OpenListbox(self): # 席を取るときのダイアログ
         #ウィジェットの作成、配置
+        self.reload_modules()
         self.dialog = Toplevel(self)
         self.dialog.title("生徒リスト")
         self.dialog.geometry("880x870")

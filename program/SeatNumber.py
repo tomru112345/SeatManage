@@ -161,6 +161,19 @@ def give_name(number):
                     Student = i["名前"]
                     return Student
 
+def write_filename(beforefilename, filename):
+    Path_setting = './settings.py'
+    with open(Path_setting, encoding="utf-8") as f:
+        data_lines = f.read()
+
+    # 文字列置換
+    data_lines = data_lines.replace(f"""Path = '{beforefilename}'""", f"""Path = '{filename}'""")
+
+    # 同じファイル名で保存
+    with open(Path_setting, mode="w", encoding="utf-8") as f:
+        f.write(data_lines)
+        f.close()
+
 
 
 
