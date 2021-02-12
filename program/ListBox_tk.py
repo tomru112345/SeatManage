@@ -195,7 +195,7 @@ class Seat(ttk.Frame): # リストボックスのクラス
         font1 = font.Font(size=20, weight='bold')
         Select_Student = SeatNumber.give_name(Select_Number)
         self.label1 = Label(self.dialog, text=f"""
-        "{Select_Student}"さん
+        {Select_Student} さん
         この席を空けますか?
         """, font = font1, anchor='w')
         self.label1.grid(column=0, row=1, columnspan= 2)
