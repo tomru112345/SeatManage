@@ -40,7 +40,7 @@ def load_studentlist(path):
                     for k, v in zip(header_cells, row): # zip 関数(forループで複数のリストの要素を取得)
                         row_dic[k.value] = v.value
                     student_list.append(row_dic)
-    return True, student_list
+        return True, student_list
 
 def setlist_course(student_list, course):
     """リストの活用"""

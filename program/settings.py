@@ -1,7 +1,5 @@
 # -*- coding:utf-8 -*-
 # デフォルトの設定を以下に記載する
-# Excel ファイルのパス
-#Path = 'D:/Eisu_Seat_manage/生徒名簿.xlsx'
 
 # 学生リスト
 student_list = []
@@ -59,9 +57,9 @@ LAYOUT = [
 ]
 
 License = """
-        Copyright © 2001-2021 Python Software Foundation; All Rights Reserved
-        
-        Copyright © 2021 Kazuma Tamura
-        This software is released under the MIT License
-        see https://opensource.org/licenses/MIT
-        """
+        　Copyright © 2001-2021 Python Software Foundation; All Rights Reserved
+            
+        　Copyright © 2021 Kazuma Tamura
+        　This software is released under the MIT License
+        　see https://opensource.org/licenses/MIT
+        　"""
