@@ -2,9 +2,11 @@
 import openpyxl
 import settings
 import os
+import JsonReader
+
 
 # ファイルのパス
-path = settings.Path
+path = JsonReader.Read_json("./settings.json")
 # 学生リスト
 student_list = settings.student_list
 # コースのリスト

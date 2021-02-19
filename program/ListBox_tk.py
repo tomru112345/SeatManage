@@ -1,12 +1,14 @@
 # -*- coding:utf-8 -*-
 from tkinter import *
 import os
+import sys
 import tkinter.filedialog
 from tkinter import font
 from tkinter import ttk
 import Sort_Students
 import settings
 import SeatNumber
+import JsonReader
 import importlib
 
 height = settings.height
@@ -20,7 +22,7 @@ select_course = ""
 select_year = ""
 time = ""
 
-path = settings.Path # ファイルのパス
+path = JsonReader.Read_json("./settings.json") # ファイルのパス
 
 # 学生リスト
 student_list = settings.student_list
@@ -170,7 +172,7 @@ class Seat(ttk.Frame): # リストボックスのクラス
         button_file.grid(column=2, row=1)
 
         self.file_name = StringVar()
-        self.file_name.set(settings.Path)
+        self.file_name.set(JsonReader.Read_json("./settings.json"))
         self.label2 = Label(self.dialog, textvariable=self.file_name, font=('Helvetica', 10))
         self.label2.grid(column=0, row=2, columnspan= 3)
 
@@ -187,14 +189,15 @@ class Seat(ttk.Frame): # リストボックスのクラス
         iDir = os.path.abspath(os.path.dirname(__file__))
         file_name = tkinter.filedialog.askopenfilename(filetypes=fTyp, initialdir=iDir)
         if len(file_name) == 0:
-            self.file_name.set(settings.Path)
+            self.file_name.set(JsonReader.Read_json("./settings.json"))
         else:
             self.file_name.set(file_name)
 
     def select_filename(self, event):
         filename = self.file_name.get()
-        SeatNumber.write_filename(settings.Path, filename)
+        JsonReader.Write_Json("./settings.json",filename)
         self.dialog.destroy()
+        #sys.exit()
 
     def onOpenSettingID(self, event=None):
         """学年 ID の設定"""
@@ -239,7 +242,7 @@ class Seat(ttk.Frame): # リストボックスのクラス
     def OpenListbox(self): # 席を取るときのダイアログ
         """リストウィジェットの作成"""
         self.reload_modules()
-        Bool_value, list_value = Sort_Students.load_studentlist(settings.Path)
+        Bool_value, list_value = Sort_Students.load_studentlist(JsonReader.Read_json("./settings.json"))
 
         if Bool_value == True:
             course= Sort_Students.setlist_course(list_value, settings.course)
@@ -322,7 +325,7 @@ class Seat(ttk.Frame): # リストボックスのクラス
             if len(itemIdxList1) == 1:
                 select_course = self.course[itemIdxList1[0]]
                 select_year = self.year[itemIdxList2[0]]
-                Bool_value, list_value = Sort_Students.load_studentlist(settings.Path)
+                Bool_value, list_value = Sort_Students.load_studentlist(JsonReader.Read_json("./settings.json"))
                 student_list_keys = Sort_Students.setlist_keys(list_value)
                 choose_list = Sort_Students.choose_CYname(student_list_keys, select_course, select_year)
                 # 末尾に選択された要素を追加する
