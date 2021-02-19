@@ -58,3 +58,11 @@ LAYOUT = [
     ['25', '26', '27', '28', '29'],
     ['30', '31', '32', '33', '34']
 ]
+
+License = """
+        Copyright © 2001-2021 Python Software Foundation; All Rights Reserved
+        
+        Copyright © 2021 Kazuma Tamura
+        This software is released under the MIT License
+        see https://opensource.org/licenses/MIT
+        """

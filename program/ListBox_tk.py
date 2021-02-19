@@ -130,6 +130,27 @@ class Seat(ttk.Frame): # リストボックスのクラス
         self.master.config(menu=menubar)
         self.bind_all("<Control-i>", self.onOpenSettingID)
 
+        # ライセンス表示
+        License_menu = Menu(menubar, tearoff=0)
+        menubar.add_cascade(label="ライセンス", menu=License_menu)
+        License_menu.add_command(label="ライセンスの表示", command=self.onOpenLicense, accelerator="Ctrl+L")
+        self.master.config(menu=menubar)
+        self.bind_all("<Control-l>", self.onOpenLicense)
+
+    def onOpenLicense(self, event=None):
+        """ライセンス"""
+        self.reload_modules()
+        self.dialog = Toplevel(self)
+        self.dialog.title(f"ライセンス")
+        self.dialog.geometry("550x200")
+        self.dialog.resizable(width=False, height=False)
+        self.dialog.grab_set()
+
+        font1 = font.Font(size=10, weight='bold')
+        self.label1 = Label(self.dialog, text = settings.License, font = font1, anchor='e', justify='left')
+        self.label1.grid(column=0, row=1, columnspan= 2)
+        
+
     def onOpenSettingStudentfile(self, event=None):
         """生徒名簿の設定"""
         self.reload_modules()
