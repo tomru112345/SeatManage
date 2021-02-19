@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 # デフォルトの設定を以下に記載する
 # Excel ファイルのパス
-Path = '../生徒名簿.xlsx'
+Path = 'D:/Eisu_Seat_manage/生徒名簿.xlsx'
 
 # 学生リスト
 student_list = []
@@ -20,8 +20,8 @@ School_year = [
     "小6",
     "中1",
     "中2",
-    "中3",
-    "その他" # その他を追加したときの動作を考える
+    "中3"
+    #"その他" # その他を追加したときの動作を考える
 ]
 
 School_year_tpl = {
