@@ -13,8 +13,8 @@ student_list = settings.student_list
 course = settings.course
 # 学年IDのリスト
 School_year_ID = settings.School_year_ID
-# 学年のリスト
-School_year = settings.School_year_tpl
+# 学年のタプル
+School_year = JsonReader.Read_YearIDDefault("./settings.json")
 # ソートされた結果のリスト
 choose_list = settings.choose_list
 
@@ -41,6 +41,8 @@ def load_studentlist(path):
                         row_dic[k.value] = v.value
                     student_list.append(row_dic)
         return True, student_list
+    else:
+        return False, []
 
 def setlist_course(student_list, course):
     """リストの活用"""
@@ -57,8 +59,9 @@ def setlist_keys(student_list):
     sorted(student_list_keys)
     return student_list_keys
 
-def setlist_ID(student_list, School_year_ID):
+def setlist_ID(student_list):
     """リストの活用"""
+    School_year_ID = []
     student_list_keys = list(student_list[0].keys()) # Excel の表のキー取得
     for i in student_list:
             t = str(i[student_list_keys[0]])

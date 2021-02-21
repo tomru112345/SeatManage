@@ -10,8 +10,7 @@ import SeatNumber
 import JsonReader
 import importlib
 
-height = settings.height
-length = settings.length
+height, length = JsonReader.Read_SeatDefault("./settings.json")
 
 pingfile = settings.pingfile
 
@@ -29,8 +28,9 @@ student_list = settings.student_list
 course = settings.course
 # 学年IDのリスト
 School_year_ID = settings.School_year_ID
-# 学年のリスト
-School_year = settings.School_year_tpl
+# 学年のタプル
+# School_year = settings.School_year_tpl
+School_year = JsonReader.Read_YearIDDefault("./settings.json")
 # ソートされた結果のリスト
 choose_list = settings.choose_list
 student_list_keys = []
@@ -122,14 +122,19 @@ class Seat(ttk.Frame): # リストボックスのクラス
         menubar.add_cascade(label="設定", menu=file_menu)
 
         # 生徒名簿の設定
-        file_menu.add_command(label="生徒名簿の設定", command=self.onOpenSettingStudentfile, accelerator="Ctrl+O")
+        file_menu.add_command(label="生徒名簿", command=self.onOpenSettingStudentfile, accelerator="Ctrl+O")
         self.master.config(menu=menubar)
         self.bind_all("<Control-o>", self.onOpenSettingStudentfile)
 
         # 学年ID の設定
-        file_menu.add_command(label="学年 ID の設定", command=self.onOpenSettingID, accelerator="Ctrl+I")
+        file_menu.add_command(label="学年 ID", command=self.onOpenSettingID, accelerator="Ctrl+I")
         self.master.config(menu=menubar)
         self.bind_all("<Control-i>", self.onOpenSettingID)
+
+        # 席の設定
+        file_menu.add_command(label="自習室の席", command=self.SeatSetting, accelerator="Ctrl+F")
+        self.master.config(menu=menubar)
+        self.bind_all("<Control-f>", self.SeatSetting)
 
         # ライセンス表示
         License_menu = Menu(menubar, tearoff=0)
@@ -164,7 +169,7 @@ class Seat(ttk.Frame): # リストボックスのクラス
         font1 = font.Font(size=10, weight='bold')
         self.label1 = Label(self.dialog, text=f"""
         生徒名簿の Excel ファイルを指定してください。
-        """, font = font1, anchor='w')
+        """, font = font1, anchor='e', justify='left')
         self.label1.grid(column=0, row=1, columnspan= 2)
         button_file = ttk.Button(self.dialog, text = "開く" , style="office2.TButton")
         button_file.bind('<Button-1>', func = self.file_dialog)
@@ -202,30 +207,66 @@ class Seat(ttk.Frame): # リストボックスのクラス
         self.reload_modules()
         self.dialog = Toplevel(self)
         self.dialog.title(f"学年 ID の設定")
-        self.dialog.geometry("480x150")
+        self.dialog.geometry("270x200")
+        self.dialog.resizable(width=False, height=False)
+        self.dialog.grab_set()
+
+        Bool_value, list_value = Sort_Students.load_studentlist(JsonReader.Read_json("./settings.json"))
+        if Bool_value == True:
+            School_year_ID = Sort_Students.setlist_ID(list_value)
+
+        font1 = font.Font(size=10, weight='bold')
+        self.label1 = Label(self.dialog, text=f"""
+        現在の設定は以下になります。
+
+        * 小3 : {School_year["小3"]}
+        * 小4 : {School_year["小4"]}
+        * 小5 : {School_year["小5"]}
+        * 小6 : {School_year["小6"]}
+        * 中1 : {School_year["中1"]}
+        * 中2 : {School_year["中2"]}
+        * 中3 : {School_year["中3"]}
+        """, font = font1, anchor='e', justify='left')
+        self.label1.grid(column=0, row=0, columnspan=5)
+
+        # self.label2 = Label(self.dialog, text="[1] 学年", font = font1)
+        # self.label2.grid(column=0, row=1, sticky= W + E + N + S)
+
+        # self.label3 = Label(self.dialog, text="[2] ID", font = font1)
+        # self.label3.grid(column=1, row=1, sticky= W + E + N + S)
+
+        # self.year = settings.School_year # 学年リスト
+        # yearname = StringVar(value=self.year) # 文字列を保持させる
+        # selectyearname = StringVar() # 文字列を保持させる
+
+        # self.listyearbox  =  Listbox(self.dialog, listvariable=yearname, height=8, exportselection=0, font=font1) # リストボックスに追加
+        # self.listyearbox.grid(column=0, row=2, sticky= W + E + N + S)
+
+        # self.setID = School_year_ID # コースリスト
+        # IDname = StringVar(value=self.setID) # 文字列を保持させる
+
+        # self.listcoursebox  =  Listbox(self.dialog, listvariable=IDname, height=8, exportselection=0, font=font1) # リストボックスに追加
+        # self.listcoursebox.grid(column=1, row=2, sticky= W + E + N + S)
+        
+
+    def SeatSetting(self, event=None):
+        """席の設定"""
+        self.reload_modules()
+        self.dialog = Toplevel(self)
+        self.dialog.title(f"自習室の席の設定")
+        self.dialog.geometry("270x150")
         self.dialog.resizable(width=False, height=False)
         self.dialog.grab_set()
 
         font1 = font.Font(size=10, weight='bold')
         self.label1 = Label(self.dialog, text=f"""
-        学年 ID の設定を行います
-        """, font = font1, anchor='w')
+        現在の設定は以下になります。
+        
+        横 : {length} 席
+        縦 : {height} 席
+        """, font = font1, anchor='e', justify='left')
         self.label1.grid(column=0, row=1, columnspan= 2)
-        # button_file = ttk.Button(self.dialog, text = "開く" , style="office2.TButton")
-        # button_file.bind('<Button-1>', func = self.file_dialog)
-        # button_file.grid(column=2, row=1)
-
-        # self.file_name = StringVar()
-        # self.file_name.set(settings.Path)
-        # self.label2 = Label(self.dialog, textvariable=self.file_name, font=('Helvetica', 10))
-        # self.label2.grid(column=0, row=2, columnspan= 3)
-
-        # self.label2 = Label(self.dialog, textvariable="", font=('Helvetica', 10))
-        # self.label2.grid(column=0, row=3, columnspan= 3)
-
-        # button_fin = ttk.Button(self.dialog, text = "決定" , style="office2.TButton")
-        # button_fin.bind('<Button-1>', func = self.select_filename)
-        # button_fin.grid(column=0, row=5, columnspan= 3)
+        
 
 
     def click_option(self, event):
@@ -410,7 +451,7 @@ def main():
     root = Tk()
     root.title('座席表')
     root.geometry("1920x1080")
-    root.call('wm', 'iconphoto', root._w, PhotoImage(file=pingfile))
+    #root.call('wm', 'iconphoto', root._w, PhotoImage(file=pingfile))
     Seat(root)
     root.mainloop()
 

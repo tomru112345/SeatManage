@@ -21,21 +21,8 @@ School_year = [
     "中3"
 ]
 
-School_year_tpl = {
-    "小3" : "07",
-    "小4" : "08",
-    "小5" : "09",
-    "小6" : "10",
-    "中1" : "11",
-    "中2" : "12",
-    "中3" : "13"
-}
-
 # ソートされた結果のリスト
 choose_list = []
-
-height = 7  # 縦の席の数
-length = 5  # 横の席の数
 
 pingfile = '../image/capital_e.png'
 
