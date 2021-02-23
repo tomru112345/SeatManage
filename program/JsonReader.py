@@ -17,13 +17,24 @@ def Read_SeatDefault(Path):
             return height, length
 
 def Read_YearIDDefault(Path):
-    School_year_ID ={}
+    DicYear = {}
     if os.path.isfile(Path) == True:
         with open(Path, 'r', encoding='utf-8_sig') as f:
             data = json.load(f)
             for i in data['Year']:
-                School_year_ID[i] = data['Year'][i]
-        return School_year_ID
+                DicYear[i] = data['Year'][i]
+        return DicYear
+
+def Write_YearIDDefault(Path, DicYear):
+    if os.path.isfile(Path) == True:
+        with open(Path, 'r', encoding='utf-8_sig') as f:
+            data = json.load(f)
+        Year = data['Year']
+        for i in DicYear.keys():
+            Year[i] = DicYear[i]
+        # Pythonオブジェクトをファイル書き込み
+        with open(Path, 'w', encoding='utf-8') as f:
+            json.dump(data, f, indent=4, ensure_ascii=False)   
 
 def Write_Json(Path, value):
     if os.path.isfile(Path) == True:
@@ -35,6 +46,5 @@ def Write_Json(Path, value):
         with open(Path, 'w', encoding='utf-8') as f:
             json.dump(data, f, indent=4, ensure_ascii=False)
 
-Read_YearIDDefault("./settings.json")
 
 
