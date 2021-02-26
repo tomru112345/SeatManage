@@ -245,49 +245,67 @@ class Seat(ttk.Frame): # リストボックスのクラス
             self.reload_modules()
             self.dialog = Toplevel(self)
             self.dialog.title("生徒リスト")
-            self.dialog.geometry("910x710")
-            self.dialog.resizable(width=False, height=False)
+            self.dialog.geometry("910x950")
+            #self.dialog.resizable(width=False, height=False)
             self.dialog.grab_set()
 
-            font1 = font.Font(size=20, weight='bold')
-            self.label1 = Label(self.dialog, text= settings.text_set, font = font1, anchor='e', justify='left')
-            self.label1.grid(column=0, row=0, columnspan=2, sticky= W + E + N + S)
+            # 横の引き伸ばし設定
+            for i in range(3):
+                self.dialog.columnconfigure(i, weight=1)
+            
+            # 縦の引き伸ばし設定。0番目の結果表示欄だけ、元の大きさのまま
+            self.rowconfigure(0, weight=0)
+            for i in range(7):
+                self.dialog.rowconfigure(i, weight=1)
 
-            font2 = font.Font(size=20, weight='bold')
+            font1 = font.Font(size=15, weight='bold')
+            self.label1 = Label(self.dialog, text= settings.text_set, font = font1, anchor='e', justify='left')
+            self.label1.grid(column=0, row=0, columnspan=3)
+
+            font2 = font.Font(size=15, weight='bold')
             self.label2 = Label(self.dialog, text="[1] 学年", font = font2)
             self.label2.grid(column=0, row=1, sticky= W + E + N + S)
 
-            font3 = font.Font(size=20, weight='bold')
+            font3 = font.Font(size=15, weight='bold')
             self.label3 = Label(self.dialog, text="[2] コース", font = font3)
             self.label3.grid(column=1, row=1, sticky= W + E + N + S)
+
+            self.label3 = Label(self.dialog, text="[3] カナ行", font = font3)
+            self.label3.grid(column=2, row=1, sticky= W + E + N + S)
 
             self.year = yearName # 学年リスト
             yearname = StringVar(value=self.year) # 文字列を保持させる
             selectyearname = StringVar() # 文字列を保持させる
 
-            self.listyearbox  =  Listbox(self.dialog, listvariable=yearname, height=5, exportselection=0, font=("",20)) # リストボックスに追加
+            self.listyearbox  =  Listbox(self.dialog, listvariable=yearname, height=6, exportselection=0, font=("ＭＳ ゴシック",15,"bold")) # リストボックスに追加
             self.listyearbox.grid(column=0, row=2, sticky= W + E + N + S)
 
             self.course = course # コースリスト
             coursename = StringVar(value=self.course) # 文字列を保持させる
 
-            self.listcoursebox  =  Listbox(self.dialog, listvariable=coursename, height=5, exportselection=0, font=("",20)) # リストボックスに追加
+            self.listcoursebox  =  Listbox(self.dialog, listvariable=coursename, height=6, exportselection=0, font=("ＭＳ ゴシック",15,"bold")) # リストボックスに追加
             self.listcoursebox.grid(column=1, row=2, sticky= W + E + N + S)
 
-            button_1 = ttk.Button(self.dialog, text = "A", padding=[330,20,330,20], style="office.TButton")
+            self.kana = ["ア行","カ行","サ行","タ行","ナ行","ハ行","マ行","ヤ行","ラ行","ワ行"] # コースリスト
+            kana = StringVar(value=self.kana) # 文字列を保持させる
+
+            self.listkanabox  =  Listbox(self.dialog, listvariable=kana, height=6, exportselection=0, font=("ＭＳ ゴシック",15,"bold")) # リストボックスに追加
+            self.listkanabox.grid(column=2, row=2, sticky= W + E + N + S)
+
+            button_1 = ttk.Button(self.dialog, text = "A", padding=[330,20,330,20], style='office.TButton')
             button_1.bind('<Button-1>', func = self.selectCY)
-            button_1.grid(column=0, row=3, sticky= W + E + N + S,columnspan= 2)
+            button_1.grid(column=0, row=3, sticky= W + E + N + S,columnspan= 3)
 
-            font4 = font.Font(size=20, weight='bold')
-            self.label4 = Label(self.dialog, text="[3] 名前", font = font4)
-            self.label4.grid(column=0, row=4, columnspan= 2, sticky= W + E + N + S)
+            font4 = font.Font(size=15, weight='bold')
+            self.label4 = Label(self.dialog, text="[4] 名前", font = font4)
+            self.label4.grid(column=1, row=4, sticky= W + E + N + S)
 
-            self.selectbox = Listbox(self.dialog, listvariable=selectyearname, height=5, exportselection=0, font=("",20))
-            self.selectbox.grid(column=0, row=5, columnspan= 2, sticky= W + E + N + S)
+            self.selectbox = Listbox(self.dialog, listvariable=selectyearname, height=20, exportselection=0, font=("ＭＳ ゴシック",15,"bold"))
+            self.selectbox.grid(column=0, row=5,columnspan= 3, sticky= W + E + N + S)
 
-            button_2 = ttk.Button(self.dialog, text = "B",  padding=[330,20,330,20], style="office.TButton")
+            button_2 = ttk.Button(self.dialog, text = "B",  padding=[330,20,330,20], style='office.TButton')
             button_2.bind('<Button-1>', func = self.selectNAME)
-            button_2.grid(column=0, row=6, sticky= W + E + N + S,columnspan= 2)
+            button_2.grid(column=0, row=6, sticky= W + E + N + S,columnspan= 3)
 
             #             # 横の引き伸ばし設定
             # for i in range(length):
@@ -322,6 +340,7 @@ class Seat(ttk.Frame): # リストボックスのクラス
         # 選択されている数値インデックスを含むリストを取得
         itemIdxList1 =  self.listcoursebox.curselection()
         itemIdxList2 =  self.listyearbox.curselection()
+        itemIdxList3 =  self.listkanabox.curselection()
         if self.selectbox.size() >= 1:
             self.selectbox.delete(0, self.selectbox.size())
 
@@ -329,9 +348,10 @@ class Seat(ttk.Frame): # リストボックスのクラス
             if len(itemIdxList1) == 1:
                 select_course = self.course[itemIdxList1[0]]
                 select_year = self.year[itemIdxList2[0]]
+                kana_num = itemIdxList3[0]
                 Bool_value, list_value, yearName = Sort_Students.load_studentlist(JsonReader.Read_json("./settings.json"))
                 student_list_keys = Sort_Students.setlist_keys(list_value)
-                choose_list = Sort_Students.choose_CYname(student_list_keys, select_course, select_year)
+                choose_list = Sort_Students.choose_CYname(student_list_keys, select_course, select_year, kana_num)
                 # 末尾に選択された要素を追加する
                 for i in choose_list:
                     self.selectbox.insert("end", i)

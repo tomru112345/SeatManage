@@ -45,7 +45,8 @@ def load_studentlist(path):
                     row_dic = {}
                     # セルの値を「key-value」で登録
                     for k, v in zip(header_cells, row): # zip 関数(forループで複数のリストの要素を取得)
-                        row_dic[k.value] = v.value
+                        if not (k.value == '電話番号' or k.value == '在籍' or k.value == '面談'):
+                            row_dic[k.value] = v.value
                     student_list.append(row_dic)
         student_list_keys = list(student_list[0].keys()) # Excel の表のキー取得
         for i in student_list:
@@ -58,12 +59,14 @@ def load_studentlist(path):
     else:
         return False, [], []
 
+load_studentlist("../生徒名簿.xlsx")
+
 
 def setlist_course(student_list, course):
     """リストの活用"""
     student_list_keys = list(student_list[0].keys()) # Excel の表のキー取得
     for i in student_list:
-        course.append(str(i[student_list_keys[7]]))
+        course.append(str(i[student_list_keys[4]]))
     course = list(set(course))
     sorted(course)
     return course
@@ -85,17 +88,33 @@ def setlist_ID(student_list):
     School_year_ID.sort()
     return School_year_ID
 
-def choose_CYname(student_list_keys, name1, name2): # 選択するコース,学年のリストの要素数
+
+def choose_CYname(student_list_keys, name1, name2, kana_num): # 選択するコース,学年のリストの要素数
     """生徒の選択"""
+    kana_list = [
+    ["ア","イ","ウ","エ","オ"],
+    ["カ","キ","ク","ケ","コ"],
+    ["サ","シ","ス","セ","ソ"],
+    ["タ","チ","ツ","テ","ト"],
+    ["ナ","ニ","ヌ","ネ","ノ"],
+    ["ハ","ヒ","フ","ヘ","ホ"],
+    ["マ","ミ","ム","メ","モ"],
+    ["ヤ","ユ","ヨ"],
+    ["ラ","リ","ル","レ","ロ"],
+    ["ワ","ヲ","ン"]
+    ]
     choose_list = []
     choose_course = name1
     choose_year = name2
+    kana_list = kana_list[kana_num]
+    #print(kana_list)
     DicYear = JsonReader.Read_YearIDDefault("./settings.json")
     for i in student_list:
-        if i[student_list_keys[7]] == choose_course:
+        if i[student_list_keys[4]] == choose_course:
             if str(i[student_list_keys[0]]).startswith(DicYear[choose_year]):
-                choose_list.append(i[student_list_keys[1]])
+                print(i[student_list_keys[2]])
+                if (i[student_list_keys[2]])[0:1] in kana_list:
+                    choose_list.append(i[student_list_keys[1]])
     choose_list = list(set(choose_list))
     sorted(choose_list)
     return choose_list
-
