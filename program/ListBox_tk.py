@@ -245,7 +245,7 @@ class Seat(ttk.Frame): # リストボックスのクラス
             self.reload_modules()
             self.dialog = Toplevel(self)
             self.dialog.title("生徒リスト")
-            self.dialog.geometry("910x950")
+            #self.dialog.geometry("1280x720")
             #self.dialog.resizable(width=False, height=False)
             self.dialog.grab_set()
 
@@ -277,19 +277,19 @@ class Seat(ttk.Frame): # リストボックスのクラス
             yearname = StringVar(value=self.year) # 文字列を保持させる
             selectyearname = StringVar() # 文字列を保持させる
 
-            self.listyearbox  =  Listbox(self.dialog, listvariable=yearname, height=6, exportselection=0, font=("ＭＳ ゴシック",15,"bold")) # リストボックスに追加
+            self.listyearbox  =  Listbox(self.dialog, listvariable=yearname, height=7, exportselection=0, font=("ＭＳ ゴシック",15,"bold")) # リストボックスに追加
             self.listyearbox.grid(column=0, row=2, sticky= W + E + N + S)
 
             self.course = course # コースリスト
             coursename = StringVar(value=self.course) # 文字列を保持させる
 
-            self.listcoursebox  =  Listbox(self.dialog, listvariable=coursename, height=6, exportselection=0, font=("ＭＳ ゴシック",15,"bold")) # リストボックスに追加
+            self.listcoursebox  =  Listbox(self.dialog, listvariable=coursename, height=7, exportselection=0, font=("ＭＳ ゴシック",15,"bold")) # リストボックスに追加
             self.listcoursebox.grid(column=1, row=2, sticky= W + E + N + S)
 
             self.kana = ["ア行","カ行","サ行","タ行","ナ行","ハ行","マ行","ヤ行","ラ行","ワ行"] # コースリスト
             kana = StringVar(value=self.kana) # 文字列を保持させる
 
-            self.listkanabox  =  Listbox(self.dialog, listvariable=kana, height=6, exportselection=0, font=("ＭＳ ゴシック",15,"bold")) # リストボックスに追加
+            self.listkanabox  =  Listbox(self.dialog, listvariable=kana, height=7, exportselection=0, font=("ＭＳ ゴシック",15,"bold")) # リストボックスに追加
             self.listkanabox.grid(column=2, row=2, sticky= W + E + N + S)
 
             button_1 = ttk.Button(self.dialog, text = "A", padding=[330,20,330,20], style='office.TButton')
@@ -300,21 +300,13 @@ class Seat(ttk.Frame): # リストボックスのクラス
             self.label4 = Label(self.dialog, text="[4] 名前", font = font4)
             self.label4.grid(column=1, row=4, sticky= W + E + N + S)
 
-            self.selectbox = Listbox(self.dialog, listvariable=selectyearname, height=20, exportselection=0, font=("ＭＳ ゴシック",15,"bold"))
+            self.selectbox = Listbox(self.dialog, listvariable=selectyearname, height=15, exportselection=0, font=("ＭＳ ゴシック",15,"bold"))
             self.selectbox.grid(column=0, row=5,columnspan= 3, sticky= W + E + N + S)
 
             button_2 = ttk.Button(self.dialog, text = "B",  padding=[330,20,330,20], style='office.TButton')
             button_2.bind('<Button-1>', func = self.selectNAME)
             button_2.grid(column=0, row=6, sticky= W + E + N + S,columnspan= 3)
 
-            #             # 横の引き伸ばし設定
-            # for i in range(length):
-            #     self.dialog.columnconfigure(i, weight=1)
-            
-            # # 縦の引き伸ばし設定。0番目の結果表示欄だけ、元の大きさのまま
-            # self.dialog.rowconfigure(0, weight=0)
-            # for i in range(height):
-            #     self.dialog.rowconfigure(i + 1, weight=1)
 
         elif Bool_value == False:
             self.reload_modules()
