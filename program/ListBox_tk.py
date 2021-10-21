@@ -20,7 +20,7 @@ select_course = ""
 select_year = ""
 time = ""
 
-path = JsonReader.Read_json("./settings.json") # ファイルのパス
+path = JsonReader.Read_json("./settings.json")  # ファイルのパス
 
 # 学生リスト
 student_list = settings.student_list
@@ -40,8 +40,9 @@ LAYOUT = settings.LAYOUT
 
 buttons = []
 
-class Seat(ttk.Frame): # リストボックスのクラス
-    
+
+class Seat(ttk.Frame):  # リストボックスのクラス
+
     def __init__(self, master=None):
         """初期化"""
         super().__init__(master)
@@ -59,22 +60,26 @@ class Seat(ttk.Frame): # リストボックスのクラス
         style = ttk.Style()
         style.theme_use('alt')
         # ボタンのスタイルを上書き
-        style.configure('MyWidget.TButton', font=('Helvetica', 20), background='#32CD32')
+        style.configure('MyWidget.TButton', font=(
+            'Helvetica', 20), background='#32CD32')
 
         style2 = ttk.Style()
         style2.theme_use('alt')
         # ボタンのスタイルを上書き
-        style2.configure('office.TButton', font=('Helvetica', 20), background='#D3D3D3')
+        style2.configure('office.TButton', font=(
+            'Helvetica', 20), background='#D3D3D3')
 
         style3 = ttk.Style()
         style3.theme_use('alt')
         # ボタンのスタイルを上書き
-        style3.configure('MyWidget2.TButton', font=('Helvetica', 20), background='#DC143C')
+        style3.configure('MyWidget2.TButton', font=(
+            'Helvetica', 20), background='#DC143C')
 
         style4 = ttk.Style()
         style4.theme_use('alt')
         # ボタンのスタイルを上書き
-        style4.configure('office2.TButton', font=('Helvetica', 10), background='#D3D3D3')
+        style4.configure('office2.TButton', font=(
+            'Helvetica', 10), background='#D3D3D3')
 
     def create_widgets(self):
         """席ボタンウィジェットの作成."""
@@ -83,8 +88,8 @@ class Seat(ttk.Frame): # リストボックスのクラス
         自習室の希望する席を選んでください。
         * 緑 : 席が空いてます
         * 赤 : 席を使っています
-        """, font = font0, anchor='e', justify='left', bg="gray85")
-        self.label0.grid(column=0, row=0,columnspan=5)
+        """, font=font0, anchor='e', justify='left', bg="gray85")
+        self.label0.grid(column=0, row=0, columnspan=5)
         # レイアウトの作成
         for y, row in enumerate(LAYOUT, 1):
             for x, char in enumerate(row):
@@ -92,20 +97,26 @@ class Seat(ttk.Frame): # リストボックスのクラス
                     No_Vacant_Seat = SeatNumber.Open_book()
                     if int(char) in No_Vacant_Seat:
                         index = int(char) - 1
-                        buttons.append(ttk.Button(self, text=char, style= 'MyWidget2.TButton'))
-                        buttons[index].grid(column=x, row=y, sticky=(N, S, E, W))
-                        buttons[index].bind('<Button-1>', func = self.click_option)
-                    else: 
+                        buttons.append(ttk.Button(
+                            self, text=char, style='MyWidget2.TButton'))
+                        buttons[index].grid(
+                            column=x, row=y, sticky=(N, S, E, W))
+                        buttons[index].bind(
+                            '<Button-1>', func=self.click_option)
+                    else:
                         index = int(char) - 1
-                        buttons.append(ttk.Button(self, text=char, style= 'MyWidget.TButton'))
-                        buttons[index].grid(column=x, row=y, sticky=(N, S, E, W))
-                        buttons[index].bind('<Button-1>', func = self.click_option)
+                        buttons.append(ttk.Button(
+                            self, text=char, style='MyWidget.TButton'))
+                        buttons[index].grid(
+                            column=x, row=y, sticky=(N, S, E, W))
+                        buttons[index].bind(
+                            '<Button-1>', func=self.click_option)
         self.grid(column=0, row=0, sticky=(N, S, E, W))
 
         # 横の引き伸ばし設定
         for i in range(length):
             self.columnconfigure(i, weight=1)
-        
+
         # 縦の引き伸ばし設定。0番目の結果表示欄だけ、元の大きさのまま
         self.rowconfigure(0, weight=0)
         for i in range(height):
@@ -121,19 +132,22 @@ class Seat(ttk.Frame): # リストボックスのクラス
         menubar.add_cascade(label="設定", menu=file_menu)
 
         # 生徒名簿の設定
-        file_menu.add_command(label="生徒名簿", command=self.onOpenSettingStudentfile, accelerator="Ctrl+O")
+        file_menu.add_command(
+            label="生徒名簿", command=self.onOpenSettingStudentfile, accelerator="Ctrl+O")
         self.master.config(menu=menubar)
         self.bind_all("<Control-o>", self.onOpenSettingStudentfile)
 
         # ライセンス表示
         License_menu = Menu(menubar, tearoff=0)
         menubar.add_cascade(label="表示", menu=License_menu)
-        License_menu.add_command(label="ライセンス", command=self.onOpenLicense, accelerator="Ctrl+L")
+        License_menu.add_command(
+            label="ライセンス", command=self.onOpenLicense, accelerator="Ctrl+L")
         self.master.config(menu=menubar)
         self.bind_all("<Control-l>", self.onOpenLicense)
 
         # 学年ID の設定
-        License_menu.add_command(label="学年 ID", command=self.onOpenSettingID, accelerator="Ctrl+I")
+        License_menu.add_command(
+            label="学年 ID", command=self.onOpenSettingID, accelerator="Ctrl+I")
         self.master.config(menu=menubar)
         self.bind_all("<Control-i>", self.onOpenSettingID)
 
@@ -146,22 +160,22 @@ class Seat(ttk.Frame): # リストボックスのクラス
         self.dialog.resizable(width=False, height=False)
         self.dialog.grab_set()
 
-        Bool_value, list_value, yearName = Sort_Students.load_studentlist(JsonReader.Read_json("./settings.json"))
+        Bool_value, list_value, yearName = Sort_Students.load_studentlist(
+            JsonReader.Read_json("./settings.json"))
         if Bool_value == True:
             DicYear = JsonReader.Read_YearIDDefault("./settings.json")
             font1 = font.Font(size=10, weight='bold')
-            self.labellist =[]
+            self.labellist = []
             t = 0
             self.labellist.append(Label(self.dialog, text=f"""
-                現在の設定は以下になります。""", font = font1, anchor='e', justify='left'))
+                現在の設定は以下になります。""", font=font1, anchor='e', justify='left'))
             for i in DicYear.keys():
                 t = t + 1
                 self.labellist.append(Label(self.dialog, text=f"""
                 * {i} : {DicYear[i]}
-                """, font = font1, anchor='e', justify='left'))
+                """, font=font1, anchor='e', justify='left'))
             for i in range(len(self.labellist)):
                 self.labellist[i].grid(column=0, row=i)
-
 
     def onOpenLicense(self, event=None):
         """ライセンス"""
@@ -173,9 +187,9 @@ class Seat(ttk.Frame): # リストボックスのクラス
         self.dialog.grab_set()
 
         font1 = font.Font(size=10, weight='bold')
-        self.label1 = Label(self.dialog, text = settings.License, font = font1, anchor='e', justify='left')
-        self.label1.grid(column=0, row=1, columnspan= 2)
-        
+        self.label1 = Label(self.dialog, text=settings.License,
+                            font=font1, anchor='e', justify='left')
+        self.label1.grid(column=0, row=1, columnspan=2)
 
     def onOpenSettingStudentfile(self, event=None):
         """生徒名簿の設定"""
@@ -189,29 +203,34 @@ class Seat(ttk.Frame): # リストボックスのクラス
         font1 = font.Font(size=10, weight='bold')
         self.label1 = Label(self.dialog, text=f"""
         生徒名簿の Excel ファイルを指定してください。
-        """, font = font1, anchor='e', justify='left')
-        self.label1.grid(column=0, row=1, columnspan= 2)
-        button_file = ttk.Button(self.dialog, text = "開く" , style="office2.TButton")
-        button_file.bind('<Button-1>', func = self.file_dialog)
+        """, font=font1, anchor='e', justify='left')
+        self.label1.grid(column=0, row=1, columnspan=2)
+        button_file = ttk.Button(
+            self.dialog, text="開く", style="office2.TButton")
+        button_file.bind('<Button-1>', func=self.file_dialog)
         button_file.grid(column=2, row=1)
 
         self.file_name = StringVar()
         self.file_name.set(JsonReader.Read_json("./settings.json"))
-        self.label2 = Label(self.dialog, textvariable=self.file_name, font=('Helvetica', 10))
-        self.label2.grid(column=0, row=2, columnspan= 3)
+        self.label2 = Label(
+            self.dialog, textvariable=self.file_name, font=('Helvetica', 10))
+        self.label2.grid(column=0, row=2, columnspan=3)
 
-        self.label2 = Label(self.dialog, textvariable="", font=('Helvetica', 10))
-        self.label2.grid(column=0, row=3, columnspan= 3)
+        self.label2 = Label(self.dialog, textvariable="",
+                            font=('Helvetica', 10))
+        self.label2.grid(column=0, row=3, columnspan=3)
 
-        button_fin = ttk.Button(self.dialog, text = "決定" , style="office2.TButton")
-        button_fin.bind('<Button-1>', func = self.select_filename)
-        button_fin.grid(column=0, row=5, columnspan= 3)
- 
+        button_fin = ttk.Button(self.dialog, text="決定",
+                                style="office2.TButton")
+        button_fin.bind('<Button-1>', func=self.select_filename)
+        button_fin.grid(column=0, row=5, columnspan=3)
+
     def file_dialog(self, event):
         """ファイルの選択オプション"""
         fTyp = [("Excel", "xlsx")]
         iDir = os.path.abspath(os.path.dirname(__file__))
-        file_name = tkinter.filedialog.askopenfilename(filetypes=fTyp, initialdir=iDir)
+        file_name = tkinter.filedialog.askopenfilename(
+            filetypes=fTyp, initialdir=iDir)
         if len(file_name) == 0:
             self.file_name.set(JsonReader.Read_json("./settings.json"))
         else:
@@ -219,9 +238,8 @@ class Seat(ttk.Frame): # リストボックスのクラス
 
     def select_filename(self, event):
         filename = self.file_name.get()
-        JsonReader.Write_Json("./settings.json",filename)
+        JsonReader.Write_Json("./settings.json", filename)
         self.dialog.destroy()
-
 
     def click_option(self, event):
         global Select_Number
@@ -230,83 +248,91 @@ class Seat(ttk.Frame): # リストボックスのクラス
             self.OpenListbox()
         elif (buttons[Select_Number - 1])['style'] == 'MyWidget2.TButton':
             self.OpenDialog()
-            
-        
-    def OpenListbox(self): # 席を取るときのダイアログ
+
+    def OpenListbox(self):  # 席を取るときのダイアログ
         """リストウィジェットの作成"""
         self.reload_modules()
-        Bool_value, list_value, yearName = Sort_Students.load_studentlist(JsonReader.Read_json("./settings.json"))
+        Bool_value, list_value, yearName = Sort_Students.load_studentlist(
+            JsonReader.Read_json("./settings.json"))
 
         if Bool_value == True:
             School_year_ID = Sort_Students.setlist_ID(list_value)
 
-            course= Sort_Students.setlist_course(list_value, settings.course)
+            course = Sort_Students.setlist_course(list_value, settings.course)
 
             self.reload_modules()
             self.dialog = Toplevel(self)
             self.dialog.title("生徒リスト")
-            #self.dialog.geometry("1280x720")
+            # self.dialog.geometry("1280x720")
             #self.dialog.resizable(width=False, height=False)
             self.dialog.grab_set()
 
             # 横の引き伸ばし設定
             for i in range(3):
                 self.dialog.columnconfigure(i, weight=1)
-            
+
             # 縦の引き伸ばし設定。0番目の結果表示欄だけ、元の大きさのまま
             self.rowconfigure(0, weight=0)
             for i in range(7):
                 self.dialog.rowconfigure(i, weight=1)
 
             font1 = font.Font(size=15, weight='bold')
-            self.label1 = Label(self.dialog, text= settings.text_set, font = font1, anchor='e', justify='left')
+            self.label1 = Label(self.dialog, text=settings.text_set,
+                                font=font1, anchor='e', justify='left')
             self.label1.grid(column=0, row=0, columnspan=3)
 
             font2 = font.Font(size=15, weight='bold')
-            self.label2 = Label(self.dialog, text="[1] 学年", font = font2)
-            self.label2.grid(column=0, row=1, sticky= W + E + N + S)
+            self.label2 = Label(self.dialog, text="[1] 学年", font=font2)
+            self.label2.grid(column=0, row=1, sticky=W + E + N + S)
 
             font3 = font.Font(size=15, weight='bold')
-            self.label3 = Label(self.dialog, text="[2] コース", font = font3)
-            self.label3.grid(column=1, row=1, sticky= W + E + N + S)
+            self.label3 = Label(self.dialog, text="[2] コース", font=font3)
+            self.label3.grid(column=1, row=1, sticky=W + E + N + S)
 
-            self.label3 = Label(self.dialog, text="[3] カナ行", font = font3)
-            self.label3.grid(column=2, row=1, sticky= W + E + N + S)
+            self.label3 = Label(self.dialog, text="[3] カナ行", font=font3)
+            self.label3.grid(column=2, row=1, sticky=W + E + N + S)
 
-            self.year = yearName # 学年リスト
-            yearname = StringVar(value=self.year) # 文字列を保持させる
-            selectyearname = StringVar() # 文字列を保持させる
+            self.year = yearName  # 学年リスト
+            yearname = StringVar(value=self.year)  # 文字列を保持させる
+            selectyearname = StringVar()  # 文字列を保持させる
 
-            self.listyearbox  =  Listbox(self.dialog, listvariable=yearname, height=7, exportselection=0, font=("ＭＳ ゴシック",15,"bold")) # リストボックスに追加
-            self.listyearbox.grid(column=0, row=2, sticky= W + E + N + S)
+            self.listyearbox = Listbox(self.dialog, listvariable=yearname, height=7, exportselection=0, font=(
+                "ＭＳ ゴシック", 15, "bold"))  # リストボックスに追加
+            self.listyearbox.grid(column=0, row=2, sticky=W + E + N + S)
 
-            self.course = course # コースリスト
-            coursename = StringVar(value=self.course) # 文字列を保持させる
+            self.course = course  # コースリスト
+            coursename = StringVar(value=self.course)  # 文字列を保持させる
 
-            self.listcoursebox  =  Listbox(self.dialog, listvariable=coursename, height=7, exportselection=0, font=("ＭＳ ゴシック",15,"bold")) # リストボックスに追加
-            self.listcoursebox.grid(column=1, row=2, sticky= W + E + N + S)
+            self.listcoursebox = Listbox(self.dialog, listvariable=coursename, height=7, exportselection=0, font=(
+                "ＭＳ ゴシック", 15, "bold"))  # リストボックスに追加
+            self.listcoursebox.grid(column=1, row=2, sticky=W + E + N + S)
 
-            self.kana = ["ア行","カ行","サ行","タ行","ナ行","ハ行","マ行","ヤ行","ラ行","ワ行"] # コースリスト
-            kana = StringVar(value=self.kana) # 文字列を保持させる
+            self.kana = ["ア行", "カ行", "サ行", "タ行", "ナ行",
+                         "ハ行", "マ行", "ヤ行", "ラ行", "ワ行"]  # コースリスト
+            kana = StringVar(value=self.kana)  # 文字列を保持させる
 
-            self.listkanabox  =  Listbox(self.dialog, listvariable=kana, height=7, exportselection=0, font=("ＭＳ ゴシック",15,"bold")) # リストボックスに追加
-            self.listkanabox.grid(column=2, row=2, sticky= W + E + N + S)
+            self.listkanabox = Listbox(self.dialog, listvariable=kana, height=7, exportselection=0, font=(
+                "ＭＳ ゴシック", 15, "bold"))  # リストボックスに追加
+            self.listkanabox.grid(column=2, row=2, sticky=W + E + N + S)
 
-            button_1 = ttk.Button(self.dialog, text = "A", padding=[330,20,330,20], style='office.TButton')
-            button_1.bind('<Button-1>', func = self.selectCY)
-            button_1.grid(column=0, row=3, sticky= W + E + N + S,columnspan= 3)
+            button_1 = ttk.Button(self.dialog, text="A", padding=[
+                                  330, 20, 330, 20], style='office.TButton')
+            button_1.bind('<Button-1>', func=self.selectCY)
+            button_1.grid(column=0, row=3, sticky=W + E + N + S, columnspan=3)
 
             font4 = font.Font(size=15, weight='bold')
-            self.label4 = Label(self.dialog, text="[4] 名前", font = font4)
-            self.label4.grid(column=1, row=4, sticky= W + E + N + S)
+            self.label4 = Label(self.dialog, text="[4] 名前", font=font4)
+            self.label4.grid(column=1, row=4, sticky=W + E + N + S)
 
-            self.selectbox = Listbox(self.dialog, listvariable=selectyearname, height=15, exportselection=0, font=("ＭＳ ゴシック",15,"bold"))
-            self.selectbox.grid(column=0, row=5,columnspan= 3, sticky= W + E + N + S)
+            self.selectbox = Listbox(self.dialog, listvariable=selectyearname,
+                                     height=15, exportselection=0, font=("ＭＳ ゴシック", 15, "bold"))
+            self.selectbox.grid(
+                column=0, row=5, columnspan=3, sticky=W + E + N + S)
 
-            button_2 = ttk.Button(self.dialog, text = "B",  padding=[330,20,330,20], style='office.TButton')
-            button_2.bind('<Button-1>', func = self.selectNAME)
-            button_2.grid(column=0, row=6, sticky= W + E + N + S,columnspan= 3)
-
+            button_2 = ttk.Button(self.dialog, text="B",  padding=[
+                                  330, 20, 330, 20], style='office.TButton')
+            button_2.bind('<Button-1>', func=self.selectNAME)
+            button_2.grid(column=0, row=6, sticky=W + E + N + S, columnspan=3)
 
         elif Bool_value == False:
             self.reload_modules()
@@ -317,22 +343,22 @@ class Seat(ttk.Frame): # リストボックスのクラス
             self.dialog.grab_set()
 
             font1 = font.Font(size=20, weight='bold')
-            self.label1 = Label(self.dialog, text= "生徒の名簿ファイルが正しくありません", font = font1, anchor='e', justify='left')
+            self.label1 = Label(
+                self.dialog, text="生徒の名簿ファイルが正しくありません", font=font1, anchor='e', justify='left')
             self.label1.grid(column=0, row=0, columnspan=3)
 
-            button_fin = ttk.Button(self.dialog, text = "閉じる",  padding=[330,20,330,20], style="office.TButton")
-            button_fin.bind('<Button-1>', func = self.selectfin)
+            button_fin = ttk.Button(self.dialog, text="閉じる",  padding=[
+                                    330, 20, 330, 20], style="office.TButton")
+            button_fin.bind('<Button-1>', func=self.selectfin)
             button_fin.grid(column=0, row=1)
-            
-        
 
     def selectCY(self, event):
         global choose_list, select_course, select_year
         self.reload_modules()
         # 選択されている数値インデックスを含むリストを取得
-        itemIdxList1 =  self.listcoursebox.curselection()
-        itemIdxList2 =  self.listyearbox.curselection()
-        itemIdxList3 =  self.listkanabox.curselection()
+        itemIdxList1 = self.listcoursebox.curselection()
+        itemIdxList2 = self.listyearbox.curselection()
+        itemIdxList3 = self.listkanabox.curselection()
         if self.selectbox.size() >= 1:
             self.selectbox.delete(0, self.selectbox.size())
 
@@ -341,9 +367,11 @@ class Seat(ttk.Frame): # リストボックスのクラス
                 select_course = self.course[itemIdxList1[0]]
                 select_year = self.year[itemIdxList2[0]]
                 kana_num = itemIdxList3[0]
-                Bool_value, list_value, yearName = Sort_Students.load_studentlist(JsonReader.Read_json("./settings.json"))
+                Bool_value, list_value, yearName = Sort_Students.load_studentlist(
+                    JsonReader.Read_json("./settings.json"))
                 student_list_keys = Sort_Students.setlist_keys(list_value)
-                choose_list = Sort_Students.choose_CYname(student_list_keys, select_course, select_year, kana_num)
+                choose_list = Sort_Students.choose_CYname(
+                    student_list_keys, select_course, select_year, kana_num)
                 # 末尾に選択された要素を追加する
                 for i in choose_list:
                     self.selectbox.insert("end", i)
@@ -353,16 +381,17 @@ class Seat(ttk.Frame): # リストボックスのクラス
         self.reload_modules()
         SeatNumber.New_day_book()
         # 選択されている数値インデックスを含むリストを取得
-        itemIdxList =  self.selectbox.curselection()
+        itemIdxList = self.selectbox.curselection()
         if len(itemIdxList) == 1:
             select_name = choose_list[itemIdxList[0]]
             self.dialog.destroy()
             Select_Student = select_name
             (buttons[Select_Number - 1])['style'] = 'MyWidget2.TButton'
-            SeatNumber.append_time_in(Select_Student, Select_Number, select_year, select_course)
+            SeatNumber.append_time_in(
+                Select_Student, Select_Number, select_year, select_course)
 
-    def OpenDialog(self): # 席を開けるときのダイアログ
-        #ウィジェットの作成、配置
+    def OpenDialog(self):  # 席を開けるときのダイアログ
+        # ウィジェットの作成、配置
         global Select_Number, Select_Student
         self.reload_modules()
         self.dialog = Toplevel(self)
@@ -376,13 +405,15 @@ class Seat(ttk.Frame): # リストボックスのクラス
         self.label1 = Label(self.dialog, text=f"""
         {Select_Student} さん
         この席を空けますか?
-        """, font = font1, anchor='e', justify='left')
-        self.label1.grid(column=0, row=1, columnspan= 2)
+        """, font=font1, anchor='e', justify='left')
+        self.label1.grid(column=0, row=1, columnspan=2)
 
-        button_yes = ttk.Button(self.dialog, text = "はい" ,command=self.selectYes, style="office.TButton")
+        button_yes = ttk.Button(self.dialog, text="はい",
+                                command=self.selectYes, style="office.TButton")
         button_yes.grid(column=0, row=2)
 
-        button_no = ttk.Button(self.dialog, text = "いいえ" ,command=self.selectNo, style="office.TButton")
+        button_no = ttk.Button(self.dialog, text="いいえ",
+                               command=self.selectNo, style="office.TButton")
         button_no.grid(column=2, row=2)
 
     def selectYes(self):
@@ -392,12 +423,12 @@ class Seat(ttk.Frame): # リストボックスのクラス
         (buttons[Select_Number - 1])['style'] = 'MyWidget.TButton'
         time = SeatNumber.leave_seat_time(Select_Student, Select_Number)
         self.OpenDialog2()
-    
+
     def selectNo(self):
         self.dialog.destroy()
 
-    def OpenDialog2(self): # 席を開けるときのダイアログ
-        #ウィジェットの作成、配置
+    def OpenDialog2(self):  # 席を開けるときのダイアログ
+        # ウィジェットの作成、配置
         global Select_Number, Select_Student, time
         self.reload_modules()
         self.dialog = Toplevel(self)
@@ -412,22 +443,22 @@ class Seat(ttk.Frame): # リストボックスのクラス
         今日の勉強時間は
          {time} です。
         お疲れ様でした。
-        """, font = font1, anchor='e', justify='left')
-        self.label1.grid(column=0, row=1, columnspan= 3)
+        """, font=font1, anchor='e', justify='left')
+        self.label1.grid(column=0, row=1, columnspan=3)
 
-        button_fin = ttk.Button(self.dialog, text = "終了" , style="office.TButton")
-        button_fin.bind('<Button-1>', func = self.selectfin)
-        button_fin.grid(column=0, row=2,columnspan= 3)
+        button_fin = ttk.Button(self.dialog, text="終了", style="office.TButton")
+        button_fin.bind('<Button-1>', func=self.selectfin)
+        button_fin.grid(column=0, row=2, columnspan=3)
 
     def selectfin(self, event):
         self.dialog.destroy()
-
 
 
 def main():
     root = Tk()
     root.title('座席表')
     root.geometry("1920x1080")
+    root.state("zoomed")
     #root.call('wm', 'iconphoto', root._w, PhotoImage(file=pingfile))
     Seat(root)
     root.mainloop()
