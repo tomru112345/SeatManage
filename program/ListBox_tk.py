@@ -34,6 +34,8 @@ School_year = JsonReader.Read_YearIDDefault("./settings.json")
 choose_list = settings.choose_list
 student_list_keys = []
 
+font_name = settings.font_name
+
 # 2次元配列のとおりに、gridでレイアウトを作成する
 
 LAYOUT = settings.LAYOUT
@@ -61,29 +63,29 @@ class Seat(ttk.Frame):  # リストボックスのクラス
         style.theme_use('alt')
         # ボタンのスタイルを上書き
         style.configure('MyWidget.TButton', font=(
-            'Helvetica', 20), background='#32CD32')
+            font_name, 20), background='#32CD32')
 
         style2 = ttk.Style()
         style2.theme_use('alt')
         # ボタンのスタイルを上書き
         style2.configure('office.TButton', font=(
-            'Helvetica', 20), background='#D3D3D3')
+            font_name, 20), background='#D3D3D3')
 
         style3 = ttk.Style()
         style3.theme_use('alt')
         # ボタンのスタイルを上書き
         style3.configure('MyWidget2.TButton', font=(
-            'Helvetica', 20), background='#DC143C')
+            font_name, 20), background='#DC143C')
 
         style4 = ttk.Style()
         style4.theme_use('alt')
         # ボタンのスタイルを上書き
         style4.configure('office2.TButton', font=(
-            'Helvetica', 10), background='#D3D3D3')
+            font_name, 10), background='#D3D3D3')
 
     def create_widgets(self):
         """席ボタンウィジェットの作成."""
-        font0 = font.Font(size=20, weight='bold')
+        font0 = font.Font(family=font_name, size=20, weight='bold')
         self.label0 = Label(self, text="""
         自習室の希望する席を選んでください。
         * 緑 : 席が空いてます
@@ -156,7 +158,12 @@ class Seat(ttk.Frame):  # リストボックスのクラス
         self.reload_modules()
         self.dialog = Toplevel(self)
         self.dialog.title(f"学年 ID")
-        self.dialog.geometry("350x700")
+        window_width = 350
+        window_height = 700
+        x = int(int(self.dialog.winfo_screenwidth()/2) - int(window_width/2))
+        y = int(int(self.dialog.winfo_screenheight()/2) -
+                int(window_height/2))
+        self.dialog.geometry(f"{window_width}x{window_height}+{x}+{y}")
         self.dialog.resizable(width=False, height=False)
         self.dialog.grab_set()
 
@@ -182,7 +189,12 @@ class Seat(ttk.Frame):  # リストボックスのクラス
         self.reload_modules()
         self.dialog = Toplevel(self)
         self.dialog.title(f"ライセンス")
-        self.dialog.geometry("550x200")
+        window_width = 550
+        window_height = 200
+        x = int(int(self.dialog.winfo_screenwidth()/2) - int(window_width/2))
+        y = int(int(self.dialog.winfo_screenheight()/2) -
+                int(window_height/2))
+        self.dialog.geometry(f"{window_width}x{window_height}+{x}+{y}")
         self.dialog.resizable(width=False, height=False)
         self.dialog.grab_set()
 
@@ -196,11 +208,16 @@ class Seat(ttk.Frame):  # リストボックスのクラス
         self.reload_modules()
         self.dialog = Toplevel(self)
         self.dialog.title(f"生徒名簿の設定")
-        self.dialog.geometry("480x150")
+        window_width = 480
+        window_height = 150
+        x = int(int(self.dialog.winfo_screenwidth()/2) - int(window_width/2))
+        y = int(int(self.dialog.winfo_screenheight()/2) -
+                int(window_height/2))
+        self.dialog.geometry(f"{window_width}x{window_height}+{x}+{y}")
         self.dialog.resizable(width=False, height=False)
         self.dialog.grab_set()
 
-        font1 = font.Font(size=10, weight='bold')
+        font1 = font.Font(family=font_name, size=10, weight='bold')
         self.label1 = Label(self.dialog, text=f"""
         生徒名簿の Excel ファイルを指定してください。
         """, font=font1, anchor='e', justify='left')
@@ -213,11 +230,11 @@ class Seat(ttk.Frame):  # リストボックスのクラス
         self.file_name = StringVar()
         self.file_name.set(JsonReader.Read_json("./settings.json"))
         self.label2 = Label(
-            self.dialog, textvariable=self.file_name, font=('Helvetica', 10))
+            self.dialog, textvariable=self.file_name, font=(font_name, 10))
         self.label2.grid(column=0, row=2, columnspan=3)
 
         self.label2 = Label(self.dialog, textvariable="",
-                            font=('Helvetica', 10))
+                            font=(font_name, 10))
         self.label2.grid(column=0, row=3, columnspan=3)
 
         button_fin = ttk.Button(self.dialog, text="決定",
@@ -263,8 +280,12 @@ class Seat(ttk.Frame):  # リストボックスのクラス
             self.reload_modules()
             self.dialog = Toplevel(self)
             self.dialog.title("生徒リスト")
-            # self.dialog.geometry("1280x720")
-            #self.dialog.resizable(width=False, height=False)
+            window_width = 960
+            window_height = 960
+            x = int(int(self.dialog.winfo_screenwidth()/2) - int(window_width/2))
+            y = int(int(self.dialog.winfo_screenheight()/2) -
+                    int(window_height/2))
+            self.dialog.geometry(f"{window_width}x{window_height}+{x}+{0}")
             self.dialog.grab_set()
 
             # 横の引き伸ばし設定
@@ -276,20 +297,20 @@ class Seat(ttk.Frame):  # リストボックスのクラス
             for i in range(7):
                 self.dialog.rowconfigure(i, weight=1)
 
-            font1 = font.Font(size=15, weight='bold')
+            font1 = font.Font(family=font_name, size=15, weight='bold')
             self.label1 = Label(self.dialog, text=settings.text_set,
                                 font=font1, anchor='e', justify='left')
             self.label1.grid(column=0, row=0, columnspan=3)
 
-            font2 = font.Font(size=15, weight='bold')
-            self.label2 = Label(self.dialog, text="[1] 学年", font=font2)
+            font2 = font.Font(family=font_name, size=15, weight='bold')
+            self.label2 = Label(self.dialog, text="学年", font=font2)
             self.label2.grid(column=0, row=1, sticky=W + E + N + S)
 
-            font3 = font.Font(size=15, weight='bold')
-            self.label3 = Label(self.dialog, text="[2] コース", font=font3)
+            font3 = font.Font(family=font_name, size=15, weight='bold')
+            self.label3 = Label(self.dialog, text="コース", font=font3)
             self.label3.grid(column=1, row=1, sticky=W + E + N + S)
 
-            self.label3 = Label(self.dialog, text="[3] カナ行", font=font3)
+            self.label3 = Label(self.dialog, text="カナ行", font=font3)
             self.label3.grid(column=2, row=1, sticky=W + E + N + S)
 
             self.year = yearName  # 学年リスト
@@ -297,14 +318,14 @@ class Seat(ttk.Frame):  # リストボックスのクラス
             selectyearname = StringVar()  # 文字列を保持させる
 
             self.listyearbox = Listbox(self.dialog, listvariable=yearname, height=7, exportselection=0, font=(
-                "ＭＳ ゴシック", 15, "bold"))  # リストボックスに追加
+                font_name, 15, "bold"))  # リストボックスに追加
             self.listyearbox.grid(column=0, row=2, sticky=W + E + N + S)
 
             self.course = course  # コースリスト
             coursename = StringVar(value=self.course)  # 文字列を保持させる
 
             self.listcoursebox = Listbox(self.dialog, listvariable=coursename, height=7, exportselection=0, font=(
-                "ＭＳ ゴシック", 15, "bold"))  # リストボックスに追加
+                font_name, 15, "bold"))  # リストボックスに追加
             self.listcoursebox.grid(column=1, row=2, sticky=W + E + N + S)
 
             self.kana = ["ア行", "カ行", "サ行", "タ行", "ナ行",
@@ -312,24 +333,24 @@ class Seat(ttk.Frame):  # リストボックスのクラス
             kana = StringVar(value=self.kana)  # 文字列を保持させる
 
             self.listkanabox = Listbox(self.dialog, listvariable=kana, height=7, exportselection=0, font=(
-                "ＭＳ ゴシック", 15, "bold"))  # リストボックスに追加
+                font_name, 15, "bold"))  # リストボックスに追加
             self.listkanabox.grid(column=2, row=2, sticky=W + E + N + S)
 
-            button_1 = ttk.Button(self.dialog, text="A", padding=[
+            button_1 = ttk.Button(self.dialog, text="検索", padding=[
                                   330, 20, 330, 20], style='office.TButton')
             button_1.bind('<Button-1>', func=self.selectCY)
             button_1.grid(column=0, row=3, sticky=W + E + N + S, columnspan=3)
 
-            font4 = font.Font(size=15, weight='bold')
-            self.label4 = Label(self.dialog, text="[4] 名前", font=font4)
+            font4 = font.Font(family=font_name, size=15, weight='bold')
+            self.label4 = Label(self.dialog, text="名前一覧", font=font4)
             self.label4.grid(column=1, row=4, sticky=W + E + N + S)
 
             self.selectbox = Listbox(self.dialog, listvariable=selectyearname,
-                                     height=15, exportselection=0, font=("ＭＳ ゴシック", 15, "bold"))
+                                     height=15, exportselection=0, font=(font_name, 15, "bold"))
             self.selectbox.grid(
                 column=0, row=5, columnspan=3, sticky=W + E + N + S)
 
-            button_2 = ttk.Button(self.dialog, text="B",  padding=[
+            button_2 = ttk.Button(self.dialog, text="確定",  padding=[
                                   330, 20, 330, 20], style='office.TButton')
             button_2.bind('<Button-1>', func=self.selectNAME)
             button_2.grid(column=0, row=6, sticky=W + E + N + S, columnspan=3)
@@ -338,11 +359,18 @@ class Seat(ttk.Frame):  # リストボックスのクラス
             self.reload_modules()
             self.dialog = Toplevel(self)
             self.dialog.title("ファイル参照エラー")
-            self.dialog.geometry("840x130")
+
+            window_width = 840
+            window_height = 130
+            x = int(int(self.dialog.winfo_screenwidth()/2) - int(window_width/2))
+            y = int(int(self.dialog.winfo_screenheight()/2) -
+                    int(window_height/2))
+            self.dialog.geometry(f"{window_width}x{window_height}+{x}+{y}")
+
             self.dialog.resizable(width=False, height=False)
             self.dialog.grab_set()
 
-            font1 = font.Font(size=20, weight='bold')
+            font1 = font.Font(family=font_name, size=20, weight='bold')
             self.label1 = Label(
                 self.dialog, text="生徒の名簿ファイルが正しくありません", font=font1, anchor='e', justify='left')
             self.label1.grid(column=0, row=0, columnspan=3)
@@ -396,11 +424,15 @@ class Seat(ttk.Frame):  # リストボックスのクラス
         self.reload_modules()
         self.dialog = Toplevel(self)
         self.dialog.title(f"{Select_Number}番の席")
-        self.dialog.geometry("580x200")
+        window_width = 500
+        window_height = 250
+        x = int(int(self.dialog.winfo_screenwidth()/2) - int(window_width/2))
+        y = int(int(self.dialog.winfo_screenheight()/2) - int(window_height/2))
+        self.dialog.geometry(f"{window_width}x{window_height}+{x}+{y}")
         self.dialog.resizable(width=False, height=False)
         self.dialog.grab_set()
 
-        font1 = font.Font(size=20, weight='bold')
+        font1 = font.Font(family=font_name, size=20, weight='bold')
         Select_Student = SeatNumber.give_name(Select_Number)
         self.label1 = Label(self.dialog, text=f"""
         {Select_Student} さん
@@ -433,11 +465,15 @@ class Seat(ttk.Frame):  # リストボックスのクラス
         self.reload_modules()
         self.dialog = Toplevel(self)
         self.dialog.title(f"{Select_Number}番の席")
-        self.dialog.geometry("370x300")
+        window_width = 340
+        window_height = 300
+        x = int(int(self.dialog.winfo_screenwidth()/2) - int(window_width/2))
+        y = int(int(self.dialog.winfo_screenheight()/2) - int(window_height/2))
+        self.dialog.geometry(f"{window_width}x{window_height}+{x}+{y}")
         self.dialog.resizable(width=False, height=False)
         self.dialog.grab_set()
 
-        font1 = font.Font(size=20, weight='bold')
+        font1 = font.Font(family=font_name, size=20, weight='bold')
         self.label1 = Label(self.dialog, text=f"""
         {Select_Student}さん
         今日の勉強時間は
@@ -454,15 +490,37 @@ class Seat(ttk.Frame):  # リストボックスのクラス
         self.dialog.destroy()
 
 
+# スプラッシュスクリーン作成
+splash = Tk()
+splash.overrideredirect(1)  # スプラッシュ画面のタイトルバー非表示
+
+photo = PhotoImage(file=settings.pythonLOGO)  # 表示させたい画像ファイル指定
+
+splash_width = 800
+splash_height = 600
+splash_x = int(int(splash.winfo_screenwidth()/2) - int(splash_width/2))
+splash_y = int(int(splash.winfo_screenheight()/2) - int(splash_height/2))
+splash.geometry(f"{splash_width}x{splash_height}+{splash_x}+{splash_y}")
+
+canvas = Canvas(splash)  # 画像のサイズに合わせて幅と高さ調整
+canvas.pack(expand=True, fill=BOTH)
+canvas.update()
+canvas_width = canvas.winfo_width()
+canvas_height = canvas.winfo_height()
+canvas.create_image(canvas_width / 2, canvas_height /
+                    2, image=photo)
+
+
 def main():
+    splash.destroy()
     root = Tk()
     root.title('座席表')
     root.geometry("1920x1080")
     root.state("zoomed")
-    #root.call('wm', 'iconphoto', root._w, PhotoImage(file=pingfile))
     Seat(root)
     root.mainloop()
 
 
 if __name__ == '__main__':
-    main()
+    splash.after(5000, main)
+    splash.mainloop()

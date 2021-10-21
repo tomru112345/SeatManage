@@ -14,12 +14,13 @@ School_year_ID = []
 choose_list = []
 
 pingfile = '../image/capital_e.png'
+pythonLOGO = '../image/python_LOGO.png'
 
 No_Vacant_Seat = []
 
 text_set = """
-        [1] 学年,[2] コース,[3] カナ行を選んで A のボタンを押してください。
-        その後, [4] 名前 を選んで B のボタンを押してください。
+        学年, コース, カナ行を選んで 検索 のボタンを押してください。
+        その後, 名前 を選んで 確定 のボタンを押してください。
         """
 
 LAYOUT = [
@@ -39,3 +40,5 @@ License = """
         　This software is released under the MIT License
         　see https://opensource.org/licenses/MIT
         　"""
+
+font_name = 'Yu Gothic UI'
