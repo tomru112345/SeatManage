@@ -83,7 +83,7 @@ class Seat(ttk.Frame): # リストボックスのクラス
         自習室の希望する席を選んでください。
         * 緑 : 席が空いてます
         * 赤 : 席を使っています
-        """, font = font0, anchor='e', justify='left')
+        """, font = font0, anchor='e', justify='left', bg="gray85")
         self.label0.grid(column=0, row=0,columnspan=5)
         # レイアウトの作成
         for y, row in enumerate(LAYOUT, 1):

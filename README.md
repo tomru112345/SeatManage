@@ -3,5 +3,5 @@
 ## EXE 化コマンドについて
 
 ```
-pyinstaller ./*.py --onefile --noconsole --name='Eisu_Seat' --hidden-import='openpyxl,pkg_resources.py2_warn,importlib'
+pyinstaller ./ListBox_tk.py --onefile --noconsole --name="Eisu_Seat" --hidden-import="openpyxl,pkg_resources.py2_warn,importlib"
 ```
