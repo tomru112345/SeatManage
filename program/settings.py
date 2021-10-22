@@ -33,12 +33,6 @@ LAYOUT = [
     ['30', '31', '32', '33', '34']
 ]
 
-License = """
-        　Copyright © 2001-2021 Python Software Foundation; All Rights Reserved
-            
-        　Copyright © 2021 Kazuma Tamura
-        　This software is released under the MIT License
-        　see https://opensource.org/licenses/MIT
-        　"""
+License = "Copyright © 2001-2021 Python Software Foundation;\nAll Rights Reserved\nCopyright © 2021 Kazuma Tamura\nThis software is released under the MIT License\nsee https://opensource.org/licenses/MIT"
 
 font_name = 'Yu Gothic UI'

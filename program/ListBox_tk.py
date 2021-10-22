@@ -9,6 +9,7 @@ import settings
 import SeatNumber
 import JsonReader
 import importlib
+from tkinter import messagebox
 
 height, length = JsonReader.Read_SeatDefault("./settings.json")
 
@@ -86,11 +87,11 @@ class Seat(ttk.Frame):  # リストボックスのクラス
     def create_widgets(self):
         """席ボタンウィジェットの作成."""
         font0 = font.Font(family=font_name, size=20, weight='bold')
-        self.label0 = Label(self, text="""
+        self.label0 = ttk.Label(self, text="""
         自習室の希望する席を選んでください。
         * 緑 : 席が空いてます
         * 赤 : 席を使っています
-        """, font=font0, anchor='e', justify='left', bg="gray85")
+        """, font=font0, anchor='e', justify='left')
         self.label0.grid(column=0, row=0, columnspan=5)
         # レイアウトの作成
         for y, row in enumerate(LAYOUT, 1):
@@ -186,22 +187,10 @@ class Seat(ttk.Frame):  # リストボックスのクラス
 
     def onOpenLicense(self, event=None):
         """ライセンス"""
-        self.reload_modules()
-        self.dialog = Toplevel(self)
-        self.dialog.title(f"ライセンス")
-        window_width = 550
-        window_height = 200
-        x = int(int(self.dialog.winfo_screenwidth()/2) - int(window_width/2))
-        y = int(int(self.dialog.winfo_screenheight()/2) -
-                int(window_height/2))
-        self.dialog.geometry(f"{window_width}x{window_height}+{x}+{y}")
-        self.dialog.resizable(width=False, height=False)
-        self.dialog.grab_set()
-
-        font1 = font.Font(size=10, weight='bold')
-        self.label1 = Label(self.dialog, text=settings.License,
-                            font=font1, anchor='e', justify='left')
-        self.label1.grid(column=0, row=1, columnspan=2)
+        messagebox.showinfo(
+            title="ライセンス",
+            message="ライセンス",
+            detail=settings.License)
 
     def onOpenSettingStudentfile(self, event=None):
         """生徒名簿の設定"""
@@ -420,74 +409,23 @@ class Seat(ttk.Frame):  # リストボックスのクラス
 
     def OpenDialog(self):  # 席を開けるときのダイアログ
         # ウィジェットの作成、配置
-        global Select_Number, Select_Student
-        self.reload_modules()
-        self.dialog = Toplevel(self)
-        self.dialog.title(f"{Select_Number}番の席")
-        window_width = 500
-        window_height = 250
-        x = int(int(self.dialog.winfo_screenwidth()/2) - int(window_width/2))
-        y = int(int(self.dialog.winfo_screenheight()/2) - int(window_height/2))
-        self.dialog.geometry(f"{window_width}x{window_height}+{x}+{y}")
-        self.dialog.resizable(width=False, height=False)
-        self.dialog.grab_set()
+        global Select_Number, Select_Student, time
 
-        font1 = font.Font(family=font_name, size=20, weight='bold')
+        self.reload_modules()
         Select_Student = SeatNumber.give_name(Select_Number)
-        self.label1 = Label(self.dialog, text=f"""
-        {Select_Student} さん
-        この席を空けますか?
-        """, font=font1, anchor='e', justify='left')
-        self.label1.grid(column=0, row=1, columnspan=2)
 
-        button_yes = ttk.Button(self.dialog, text="はい",
-                                command=self.selectYes, style="office.TButton")
-        button_yes.grid(column=0, row=2)
+        check_Seat = messagebox.askyesno(
+            title=f"{Select_Number}番の席",
+            message=f"{Select_Student} さん、この席を空けますか?")
 
-        button_no = ttk.Button(self.dialog, text="いいえ",
-                               command=self.selectNo, style="office.TButton")
-        button_no.grid(column=2, row=2)
-
-    def selectYes(self):
-        global Select_Number, Select_Student, time
-        self.reload_modules()
-        self.dialog.destroy()
-        (buttons[Select_Number - 1])['style'] = 'MyWidget.TButton'
-        time = SeatNumber.leave_seat_time(Select_Student, Select_Number)
-        self.OpenDialog2()
-
-    def selectNo(self):
-        self.dialog.destroy()
-
-    def OpenDialog2(self):  # 席を開けるときのダイアログ
-        # ウィジェットの作成、配置
-        global Select_Number, Select_Student, time
-        self.reload_modules()
-        self.dialog = Toplevel(self)
-        self.dialog.title(f"{Select_Number}番の席")
-        window_width = 340
-        window_height = 300
-        x = int(int(self.dialog.winfo_screenwidth()/2) - int(window_width/2))
-        y = int(int(self.dialog.winfo_screenheight()/2) - int(window_height/2))
-        self.dialog.geometry(f"{window_width}x{window_height}+{x}+{y}")
-        self.dialog.resizable(width=False, height=False)
-        self.dialog.grab_set()
-
-        font1 = font.Font(family=font_name, size=20, weight='bold')
-        self.label1 = Label(self.dialog, text=f"""
-        {Select_Student}さん
-        今日の勉強時間は
-         {time} です。
-        お疲れ様でした。
-        """, font=font1, anchor='e', justify='left')
-        self.label1.grid(column=0, row=1, columnspan=3)
-
-        button_fin = ttk.Button(self.dialog, text="終了", style="office.TButton")
-        button_fin.bind('<Button-1>', func=self.selectfin)
-        button_fin.grid(column=0, row=2, columnspan=3)
-
-    def selectfin(self, event):
-        self.dialog.destroy()
+        if check_Seat:
+            self.reload_modules()
+            (buttons[Select_Number - 1])['style'] = 'MyWidget.TButton'
+            time = SeatNumber.leave_seat_time(Select_Student, Select_Number)
+            messagebox.showinfo(
+                title=f"{Select_Number}番の席",
+                message=f"{Select_Student} さん、お疲れ様でした。",
+                detail=f"今日の勉強時間は {time} です。")
 
 
 # スプラッシュスクリーン作成
@@ -518,6 +456,10 @@ def main():
     root.geometry("1920x1080")
     root.state("zoomed")
     Seat(root)
+
+    s = ttk.Style()
+    s.theme_use('alt')
+
     root.mainloop()
 
 
