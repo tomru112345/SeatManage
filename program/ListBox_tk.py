@@ -283,6 +283,7 @@ class Seat(ttk.Frame):  # リストボックスのクラス
 
             self.reload_modules()
             self.dialog = Toplevel(self)
+
             self.dialog.title("生徒リスト")
             window_width = 960
             window_height = 960
@@ -450,6 +451,7 @@ def main():
     root.title('座席表')
     root.geometry("1920x1080")
     root.state("zoomed")
+    root.iconbitmap(settings.pythonLOGOICO)
     Seat(root)
 
     s = ttk.Style()

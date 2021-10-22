@@ -15,6 +15,7 @@ choose_list = []
 
 pingfile = '../image/capital_e.png'
 pythonLOGO = '../image/python_LOGO.png'
+pythonLOGOICO = '../image/python_LOGO.ico'
 
 No_Vacant_Seat = []
 
