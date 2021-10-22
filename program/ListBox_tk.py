@@ -173,6 +173,7 @@ class Seat(ttk.Frame):  # リストボックスのクラス
         """学年 ID"""
         self.reload_modules()
         self.dialog = Toplevel(self)
+        self.dialog.iconbitmap(settings.pythonLOGOICO)
         self.dialog.title(f"学年 ID")
         window_width = 350
         window_height = 700
@@ -211,6 +212,7 @@ class Seat(ttk.Frame):  # リストボックスのクラス
         """生徒名簿の設定"""
         self.reload_modules()
         self.dialog = Toplevel(self)
+        self.dialog.iconbitmap(settings.pythonLOGOICO)
         self.dialog.title(f"生徒名簿の設定")
         window_width = 480
         window_height = 150
@@ -283,7 +285,7 @@ class Seat(ttk.Frame):  # リストボックスのクラス
 
             self.reload_modules()
             self.dialog = Toplevel(self)
-
+            self.dialog.iconbitmap(settings.pythonLOGOICO)
             self.dialog.title("生徒リスト")
             window_width = 960
             window_height = 960
