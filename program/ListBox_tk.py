@@ -10,6 +10,7 @@ import SeatNumber
 import JsonReader
 import importlib
 from tkinter import messagebox
+import sys
 
 height, length = JsonReader.Read_SeatDefault("./settings.json")
 
@@ -140,6 +141,11 @@ class Seat(ttk.Frame):  # リストボックスのクラス
         self.master.config(menu=menubar)
         self.bind_all("<Control-o>", self.onOpenSettingStudentfile)
 
+        file_menu.add_command(
+            label="終了", command=self.ExitApp, accelerator="Ctrl+F")
+        self.master.config(menu=menubar)
+        self.bind_all("<Control-f>", self.ExitApp)
+
         # ライセンス表示
         License_menu = Menu(menubar, tearoff=0)
         menubar.add_cascade(label="表示", menu=License_menu)
@@ -153,6 +159,15 @@ class Seat(ttk.Frame):  # リストボックスのクラス
             label="学年 ID", command=self.onOpenSettingID, accelerator="Ctrl+I")
         self.master.config(menu=menubar)
         self.bind_all("<Control-i>", self.onOpenSettingID)
+
+    def ExitApp(self, event=None):
+        check_Fin = messagebox.askyesno(
+            title=f"アプリケーション終了",
+            message=f"アプリケーションを終了しますか？")
+
+        if check_Fin:
+            self.reload_modules()
+            sys.exit()
 
     def onOpenSettingID(self, event=None):
         """学年 ID"""
@@ -346,28 +361,7 @@ class Seat(ttk.Frame):  # リストボックスのクラス
 
         elif Bool_value == False:
             self.reload_modules()
-            self.dialog = Toplevel(self)
-            self.dialog.title("ファイル参照エラー")
-
-            window_width = 840
-            window_height = 130
-            x = int(int(self.dialog.winfo_screenwidth()/2) - int(window_width/2))
-            y = int(int(self.dialog.winfo_screenheight()/2) -
-                    int(window_height/2))
-            self.dialog.geometry(f"{window_width}x{window_height}+{x}+{y}")
-
-            self.dialog.resizable(width=False, height=False)
-            self.dialog.grab_set()
-
-            font1 = font.Font(family=font_name, size=20, weight='bold')
-            self.label1 = Label(
-                self.dialog, text="生徒の名簿ファイルが正しくありません", font=font1, anchor='e', justify='left')
-            self.label1.grid(column=0, row=0, columnspan=3)
-
-            button_fin = ttk.Button(self.dialog, text="閉じる",  padding=[
-                                    330, 20, 330, 20], style="office.TButton")
-            button_fin.bind('<Button-1>', func=self.selectfin)
-            button_fin.grid(column=0, row=1)
+            messagebox.showerror('ファイル参照エラー', '生徒の名簿ファイルが正しくありません')
 
     def selectCY(self, event):
         global choose_list, select_course, select_year
@@ -416,7 +410,7 @@ class Seat(ttk.Frame):  # リストボックスのクラス
 
         check_Seat = messagebox.askyesno(
             title=f"{Select_Number}番の席",
-            message=f"{Select_Student} さん、この席を空けますか?")
+            message=f"{Select_Student} さん、この席を空けますか?                     ")
 
         if check_Seat:
             self.reload_modules()
@@ -424,8 +418,8 @@ class Seat(ttk.Frame):  # リストボックスのクラス
             time = SeatNumber.leave_seat_time(Select_Student, Select_Number)
             messagebox.showinfo(
                 title=f"{Select_Number}番の席",
-                message=f"{Select_Student} さん、お疲れ様でした。",
-                detail=f"今日の勉強時間は {time} です。")
+                message=f"{Select_Student} さん、お疲れ様でした。                     ",
+                detail=f"今日の勉強時間は {time} です。                     ")
 
 
 # スプラッシュスクリーン作成
@@ -452,6 +446,7 @@ canvas.create_image(canvas_width / 2, canvas_height /
 def main():
     splash.destroy()
     root = Tk()
+    root.overrideredirect(1)
     root.title('座席表')
     root.geometry("1920x1080")
     root.state("zoomed")
