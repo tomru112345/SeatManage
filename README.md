@@ -1,5 +1,28 @@
 # 自習室管理アプリケーション
 
+## 環境構築
+
+pythonで実行する際、以下の環境が必要です
+
+```python
+pip install openpyxl
+```
+
+## 実行方法
+
+* python で実行する際
+
+```bash
+python ListBox_tk.py
+```
+
+* exe で実行する際
+  * 以下をクリックして実行
+
+```bash
+SeatManage.exe
+```
+
 ## 主な仕様について
 
 以下、主な仕様について紹介します。
@@ -30,7 +53,7 @@
 
 ![生徒名簿の管理](./gif/座席管理3.gif)
 
-## EXE 化コマンドについて
+## EXE 化作成コマンドについて
 
 ```bash
 pyinstaller ./ListBox_tk.py --onefile --icon="../image/python_LOGO.ico" --noconsole --name="SeatManage" --hidden-import="openpyxl,pkg_resources.py2_warn,importlib"
