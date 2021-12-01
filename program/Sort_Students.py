@@ -40,7 +40,6 @@ def load_studentlist(path):
                     header_cells = row
                     for cell in row:
                         check_header.append(cell.value)
-                    # if ['在籍番号', '氏名', 'カナ名', '電話番号', '学校名', '在籍', '面談', 'コース'] != check_header:
                     if ['在籍番号', '氏名', 'カナ名', 'コース'] != check_header:
                         return False, [], []
                 else:
@@ -95,7 +94,7 @@ def setlist_ID(student_list):
     return School_year_ID
 
 
-def choose_CYname(student_list_keys, name1, name2, kana_num):  # 選択するコース,学年のリストの要素数
+def choose_CYname(student_list_keys, choose_course, choose_year, kana_num):  # 選択するコース,学年のリストの要素数
     """生徒の選択"""
     kana_list = [
         ["ア", "イ", "ウ", "エ", "オ", "ｱ", "ｲ", "ｳ", "ｴ", "ｵ"],
@@ -115,8 +114,6 @@ def choose_CYname(student_list_keys, name1, name2, kana_num):  # 選択するコ
         ["ワ", "ヲ", "ン", "ﾜ", "ｦ", "ﾝ"]
     ]
     choose_list = []
-    choose_course = name1
-    choose_year = name2
     kana_list = kana_list[kana_num]
     DicYear = JsonReader.Read_YearIDDefault("./settings.json")
     for i in student_list:

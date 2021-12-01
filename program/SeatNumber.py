@@ -4,15 +4,17 @@ import openpyxl
 import os
 import settings
 
-Seat = [] # リスト型で保存
+Seat = []  # リスト型で保存
 
 No_Vacant_Seat = settings.No_Vacant_Seat
+
 
 def time():
     dt_now = datetime.datetime.now()
     day_today = dt_now.strftime('%Y%m%d')
     time_now = dt_now.strftime('%H:%M:%S')
     return day_today, time_now
+
 
 def month_day():
     dt_now = datetime.datetime.now()
@@ -25,7 +27,7 @@ def month_day():
 def New_day_book():
     day_today, time_now = time()
     day_yearmonth, day_month, day_day = month_day()
-    if os.path.isfile(f'../log/Seat_{day_yearmonth}.xlsx') == False:
+    if not os.path.isfile(f'../log/Seat_{day_yearmonth}.xlsx'):
         book = openpyxl.Workbook(f'../log/Seat_{day_yearmonth}.xlsx')
         book.save(f'../log/Seat_{day_yearmonth}.xlsx')
         book.close()
@@ -36,15 +38,17 @@ def New_day_book():
         book.save(f'../log/Seat_{day_yearmonth}.xlsx')
         book.close()
 
+
 def Open_book():
     day_today, time_now = time()
     day_yearmonth, day_month, day_day = month_day()
-    if os.path.isfile(f'../log/Seat_{day_yearmonth}.xlsx') == True:
+    if os.path.isfile(f'../log/Seat_{day_yearmonth}.xlsx'):
         book = openpyxl.load_workbook(f'../log/Seat_{day_yearmonth}.xlsx')
         if not f"{day_month}月{day_day}日" in book.sheetnames:
             book.create_sheet(title=f"{day_month}月{day_day}日")
             active_sheet = book[f"{day_month}月{day_day}日"]
-            active_sheet.append(["名前", "席番号", "日付", "入室時間", "退室時間", "学年", "コース"])
+            active_sheet.append(
+                ["名前", "席番号", "日付", "入室時間", "退室時間", "学年", "コース"])
             book.save(f'../log/Seat_{day_yearmonth}.xlsx')
 
         active_sheet = book[f"{day_month}月{day_day}日"]
@@ -58,10 +62,10 @@ def Open_book():
                 # ２行目以降
                 row_dic = {}
                 # セルの値を「key-value」で登録
-                for k, v in zip(header_cells, row): # zip 関数(forループで複数のリストの要素を取得)
+                for k, v in zip(header_cells, row):  # zip 関数(forループで複数のリストの要素を取得)
                     row_dic[k.value] = v.value
                 if t < size:
-                    Seat[t] =row_dic
+                    Seat[t] = row_dic
                     t = t + 1
                 else:
                     Seat.append(row_dic)
@@ -73,23 +77,26 @@ def Open_book():
         book.close()
     return No_Vacant_Seat
 
-def append_time_in(name, number, year, course): # 学年, コース追加
+
+def append_time_in(name, number, year, course):  # 学年, コース追加
     day_today, time_now = time()
     day_yearmonth, day_month, day_day = month_day()
-    if os.path.isfile(f'../log/Seat_{day_yearmonth}.xlsx') == True:
-        book = openpyxl.load_workbook(filename=f'../log/Seat_{day_yearmonth}.xlsx')
+    if os.path.isfile(f'../log/Seat_{day_yearmonth}.xlsx'):
+        book = openpyxl.load_workbook(
+            filename=f'../log/Seat_{day_yearmonth}.xlsx')
         active_sheet = book[f"{day_month}月{day_day}日"]
-        active_sheet.append([name, number, day_today, time_now, "", year, course]) # 学年, コース追加
+        active_sheet.append(
+            [name, number, day_today, time_now, "", year, course])  # 学年, コース追加
         book.save(f'../log/Seat_{day_yearmonth}.xlsx')
         book.close()
-
 
 
 def leave_seat_time(name, number):
     day_today, time_now = time()
     day_yearmonth, day_month, day_day = month_day()
-    if os.path.isfile(f'../log/Seat_{day_yearmonth}.xlsx') == True:
-        book = openpyxl.load_workbook(filename=f'../log/Seat_{day_yearmonth}.xlsx')
+    if os.path.isfile(f'../log/Seat_{day_yearmonth}.xlsx'):
+        book = openpyxl.load_workbook(
+            filename=f'../log/Seat_{day_yearmonth}.xlsx')
         active_sheet = book[f"{day_month}月{day_day}日"]
         size = len(Seat)
         t = 0
@@ -101,10 +108,10 @@ def leave_seat_time(name, number):
                 # ２行目以降
                 row_dic = {}
                 # セルの値を「key-value」で登録
-                for k, v in zip(header_cells, row): # zip 関数(forループで複数のリストの要素を取得)
+                for k, v in zip(header_cells, row):  # zip 関数(forループで複数のリストの要素を取得)
                     row_dic[k.value] = v.value
                 if t < size:
-                    Seat[t] =row_dic
+                    Seat[t] = row_dic
                     t = t + 1
                 else:
                     Seat.append(row_dic)
@@ -113,27 +120,31 @@ def leave_seat_time(name, number):
             if i["席番号"] == number:
                 if i["名前"] == name:
                     if i["退室時間"] is None:
-                        active_sheet.cell(column=5, row= Seat.index(i) + 2, value= time_now)
-                        tdatetime1 = datetime.datetime.strptime(time_now, '%H:%M:%S')
-                        tdatetime2 = datetime.datetime.strptime(i["入室時間"], '%H:%M:%S')
+                        active_sheet.cell(
+                            column=5, row=Seat.index(i) + 2, value=time_now)
+                        tdatetime1 = datetime.datetime.strptime(
+                            time_now, '%H:%M:%S')
+                        tdatetime2 = datetime.datetime.strptime(
+                            i["入室時間"], '%H:%M:%S')
                         String_time = ""
                         total = tdatetime1 - tdatetime2
                         total = total.seconds
                         if total / 3600 >= 1:
-                            t = total // 3600 
+                            t = total // 3600
                             String_time = String_time + f"{t} 時間"
                             total = total - t * 3600
                         String_time = String_time + f"{total // 60} 分"
         book.save(f'../log/Seat_{day_yearmonth}.xlsx')
         book.close()
         return String_time
-    
+
 
 def give_name(number):
     day_today, time_now = time()
     day_yearmonth, day_month, day_day = month_day()
-    if os.path.isfile(f'../log/Seat_{day_yearmonth}.xlsx') == True:
-        book = openpyxl.load_workbook(filename=f'../log/Seat_{day_yearmonth}.xlsx')
+    if os.path.isfile(f'../log/Seat_{day_yearmonth}.xlsx'):
+        book = openpyxl.load_workbook(
+            filename=f'../log/Seat_{day_yearmonth}.xlsx')
         active_sheet = book[f"{day_month}月{day_day}日"]
         size = len(Seat)
         t = 0
@@ -145,10 +156,10 @@ def give_name(number):
                 # ２行目以降
                 row_dic = {}
                 # セルの値を「key-value」で登録
-                for k, v in zip(header_cells, row): # zip 関数(forループで複数のリストの要素を取得)
+                for k, v in zip(header_cells, row):  # zip 関数(forループで複数のリストの要素を取得)
                     row_dic[k.value] = v.value
                 if t < size:
-                    Seat[t] =row_dic
+                    Seat[t] = row_dic
                     t = t + 1
                 else:
                     Seat.append(row_dic)
@@ -160,8 +171,3 @@ def give_name(number):
                 if i["退室時間"] is None:
                     Student = i["名前"]
                     return Student
-
-
-
-
-
