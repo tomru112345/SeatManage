@@ -68,14 +68,13 @@ def setlist_course(student_list, course):
     for i in student_list:
         course.append(str(i[student_list_keys[3]]))
     course = list(set(course))
-    sorted(course)
+    course = sorted(course)
     return course
 
 
 def setlist_keys(student_list):
     """リストの活用"""
     student_list_keys = list(student_list[0].keys())  # Excel の表のキー取得
-    sorted(student_list_keys)
     return student_list_keys
 
 
@@ -119,5 +118,5 @@ def choose_CYname(student_list_keys, choose_course, choose_year, kana_num):  # �
                 if (i[student_list_keys[2]])[0:1] in kana_list:
                     choose_list.append(i[student_list_keys[1]])
     choose_list = list(set(choose_list))
-    sorted(choose_list)
+    choose_list = sorted(choose_list)
     return choose_list
