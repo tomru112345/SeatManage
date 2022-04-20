@@ -62,9 +62,6 @@ def load_studentlist(path):
         return False, [], []
 
 
-load_studentlist("../生徒名簿.xlsx")
-
-
 def setlist_course(student_list, course):
     """リストの活用"""
     student_list_keys = list(student_list[0].keys())  # Excel の表のキー取得

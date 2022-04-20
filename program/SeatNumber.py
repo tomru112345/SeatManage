@@ -10,16 +10,25 @@ No_Vacant_Seat = settings.No_Vacant_Seat
 
 
 def time():
+    """時間の取得関数"""
+    # データタイムの現在の値
     dt_now = datetime.datetime.now()
+    # 今の何年何月何日の値の取得
     day_today = dt_now.strftime('%Y%m%d')
+    # 今の時間の取得
     time_now = dt_now.strftime('%H:%M:%S')
     return day_today, time_now
 
 
 def month_day():
+    """何年何月何日の取得関数"""
+    # データタイムの現在の値
     dt_now = datetime.datetime.now()
+    # 年と月の同時取得
     day_yearmonth = dt_now.strftime('%Y%m')
+    # 月の取得
     day_month = dt_now.strftime('%m')
+    # 日の取得
     day_day = dt_now.strftime('%d')
     return day_yearmonth, day_month, day_day
 

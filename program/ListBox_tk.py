@@ -62,25 +62,35 @@ class Seat(ttk.Frame):  # リストボックスのクラス
     def create_style(self):
         """ボタン、ラベルのスタイルを変更."""
         style = ttk.Style()
-        style.theme_use('alt')
+
+        style_kind = ['winnative', 'clam', 'alt', 'default', 'classic', 'vista', 'xpnative']
+        i = 2
+
+        style.theme_use(style_kind[i])
         # ボタンのスタイルを上書き
-        style.configure('MyWidget.TButton', font=(
-            font_name, 20), background='#32CD32')
+        style.configure(
+            'MyWidget.TButton', 
+            font=(
+                font_name, 
+                20
+            ), 
+            background='#32CD32'
+        )
 
         style2 = ttk.Style()
-        style2.theme_use('alt')
+        style2.theme_use(style_kind[i])
         # ボタンのスタイルを上書き
         style2.configure('office.TButton', font=(
             font_name, 20), background='#D3D3D3')
 
         style3 = ttk.Style()
-        style3.theme_use('alt')
+        style3.theme_use(style_kind[i])
         # ボタンのスタイルを上書き
         style3.configure('MyWidget2.TButton', font=(
             font_name, 20), background='#DC143C')
 
         style4 = ttk.Style()
-        style4.theme_use('alt')
+        style4.theme_use(style_kind[i])
         # ボタンのスタイルを上書き
         style4.configure('office2.TButton', font=(
             font_name, 10), background='#D3D3D3')
@@ -183,9 +193,7 @@ class Seat(ttk.Frame):  # リストボックスのクラス
         self.dialog.geometry(f"{window_width}x{window_height}+{x}+{y}")
         self.dialog.resizable(width=False, height=False)
         self.dialog.grab_set()
-
-        Bool_value, list_value, yearName = Sort_Students.load_studentlist(
-            JsonReader.Read_json("./settings.json"))
+        Bool_value, list_value, yearName = Sort_Students.load_studentlist(path)
         if Bool_value == True:
             DicYear = JsonReader.Read_YearIDDefault("./settings.json")
             font1 = font.Font(size=10, weight='bold')
@@ -210,7 +218,9 @@ class Seat(ttk.Frame):  # リストボックスのクラス
 
     def onOpenSettingStudentfile(self, event=None):
         """生徒名簿の設定"""
+        # リロード
         self.reload_modules()
+
         self.dialog = Toplevel(self)
         self.dialog.iconbitmap(settings.pythonLOGOICO)
         self.dialog.title(f"生徒名簿の設定")
@@ -224,42 +234,87 @@ class Seat(ttk.Frame):  # リストボックスのクラス
         self.dialog.grab_set()
 
         font1 = font.Font(family=font_name, size=10, weight='bold')
-        self.label1 = Label(self.dialog, text=f"""
-        生徒名簿の Excel ファイルを指定してください。
-        """, font=font1, anchor='e', justify='left')
-        self.label1.grid(column=0, row=1, columnspan=2)
+        self.label1 = Label(
+            self.dialog,
+            text=f"""
+            生徒名簿の Excel ファイルを指定してください。
+            """,
+            font=font1,
+            anchor='e',
+            justify='left'
+            )
+
+        self.label1.grid(
+            column=0,
+            row=0,
+            columnspan=4,
+            sticky=tkinter.EW,
+            padx=5
+            )
+
         button_file = ttk.Button(
-            self.dialog, text="開く", style="office2.TButton")
-        button_file.bind('<Button-1>', func=self.file_dialog)
-        button_file.grid(column=2, row=1)
+            self.dialog,
+            text="開く",
+            style="office2.TButton"
+            )
+            
+        button_file.bind(
+            '<Button-1>',
+            func=self.file_dialog
+            )
+
+        button_file.grid(
+            column=4,
+            row=0,
+            sticky=tkinter.E
+            )
+
+        self.label_name = Label(
+            self.dialog,
+            text=f"""
+            選択ファイル名:
+            """,
+            font=font1,
+            justify='left'
+            )
+        self.label_name.grid(column=0, row=1)
 
         self.file_name = StringVar()
         self.file_name.set(JsonReader.Read_json("./settings.json"))
         self.label2 = Label(
-            self.dialog, textvariable=self.file_name, font=(font_name, 10))
-        self.label2.grid(column=0, row=2, columnspan=3)
+            self.dialog,
+            textvariable=self.file_name,
+            font=font1,
+            justify='left'
+            )
+        self.label2.grid(column=1, row=1, columnspan=4)
 
-        self.label2 = Label(self.dialog, textvariable="",
-                            font=(font_name, 10))
-        self.label2.grid(column=0, row=3, columnspan=3)
-
-        button_fin = ttk.Button(self.dialog, text="決定",
-                                style="office2.TButton")
-        button_fin.bind('<Button-1>', func=self.select_filename)
-        button_fin.grid(column=0, row=5, columnspan=3)
+        button_fin = ttk.Button(
+            self.dialog,
+            text="決定",
+            style="office2.TButton"
+            )
+        button_fin.bind(
+            '<Button-1>',
+            func=self.select_filename
+            )
+        button_fin.grid(column=4, row=2)
 
     def file_dialog(self, event):
         """ファイルの選択オプション"""
         fTyp = [("Excel", "xlsx")]
         iDir = os.path.abspath(os.path.dirname(__file__))
         file_name = tkinter.filedialog.askopenfilename(
-            filetypes=fTyp, initialdir=iDir)
+            filetypes=fTyp,
+            initialdir=iDir
+            )
         if len(file_name) == 0:
             self.file_name.set(JsonReader.Read_json("./settings.json"))
         else:
             self.file_name.set(file_name)
 
     def select_filename(self, event):
+        """生徒名簿ファイル選択結果の更新を行う関数"""
         filename = self.file_name.get()
         JsonReader.Write_Json("./settings.json", filename)
         self.dialog.destroy()
@@ -275,8 +330,7 @@ class Seat(ttk.Frame):  # リストボックスのクラス
     def OpenListbox(self):  # 席を取るときのダイアログ
         """リストウィジェットの作成"""
         self.reload_modules()
-        Bool_value, list_value, yearName = Sort_Students.load_studentlist(
-            JsonReader.Read_json("./settings.json"))
+        Bool_value, list_value, yearName = Sort_Students.load_studentlist(path)
 
         if Bool_value == True:
             School_year_ID = Sort_Students.setlist_ID(list_value)
@@ -370,19 +424,19 @@ class Seat(ttk.Frame):  # リストボックスのクラス
         global choose_list, select_course, select_year
         self.reload_modules()
         # 選択されている数値インデックスを含むリストを取得
-        itemIdxList1 = self.listcoursebox.curselection()
-        itemIdxList2 = self.listyearbox.curselection()
-        itemIdxList3 = self.listkanabox.curselection()
+        itemIdxLists = []
+        itemIdxLists.append(self.listcoursebox.curselection())
+        itemIdxLists.append(self.listyearbox.curselection())
+        itemIdxLists.append(self.listkanabox.curselection())
+
         if self.selectbox.size() >= 1:
             self.selectbox.delete(0, self.selectbox.size())
 
-        if len(itemIdxList1) == 1:
-            if len(itemIdxList1) == 1:
-                select_course = self.course[itemIdxList1[0]]
-                select_year = self.year[itemIdxList2[0]]
-                kana_num = itemIdxList3[0]
-                Bool_value, list_value, yearName = Sort_Students.load_studentlist(
-                    JsonReader.Read_json("./settings.json"))
+        if len(itemIdxLists[0]) == 1:
+                select_course = self.course[itemIdxLists[0][0]]
+                select_year = self.year[itemIdxLists[1][0]]
+                kana_num = itemIdxLists[2][0]
+                Bool_value, list_value, yearName = Sort_Students.load_studentlist(path)
                 student_list_keys = Sort_Students.setlist_keys(list_value)
                 choose_list = Sort_Students.choose_CYname(
                     student_list_keys, select_course, select_year, kana_num)
@@ -413,7 +467,8 @@ class Seat(ttk.Frame):  # リストボックスのクラス
 
         check_Seat = messagebox.askyesno(
             title=f"{Select_Number}番の席",
-            message=f"{Select_Student} さん、この席を空けますか?                     ")
+            message=f"{Select_Student} さん、この席を空けますか?                     "
+            )
 
         if check_Seat:
             self.reload_modules()
@@ -426,6 +481,7 @@ class Seat(ttk.Frame):  # リストボックスのクラス
 
 
 # スプラッシュスクリーン作成
+
 splash = Tk()
 splash.overrideredirect(1)  # スプラッシュ画面のタイトルバー非表示
 
