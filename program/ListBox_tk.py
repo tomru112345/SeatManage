@@ -211,7 +211,7 @@ class Seat(ttk.Frame):  # リストボックスのクラス
         tree.heading('ID', text='ID',anchor='center')
         tree.heading('SchoolYear', text='学年', anchor='center')
 
-        if Bool_value == True:
+        if Bool_value:
             
             DicYear = JsonReader.Read_YearIDDefault("./settings.json")
             t = 0
