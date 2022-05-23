@@ -4,7 +4,13 @@
     },
     "SeatSettings": {
         "height": 7,
-        "length": 5
+        "length": 5,
+        "IgnoreSeat": [
+            {
+                "height": 3,
+                "length": 4
+            }
+        ]
     },
     "Year": {
         "小2": "01",

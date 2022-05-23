@@ -78,9 +78,9 @@ def Open_book():
                     t = t + 1
                 else:
                     Seat.append(row_dic)
-
+        
         for i in Seat:
-            if i["退室時間"] == None:
+            if (i["退室時間"] == None) and (not i["席番号"] in No_Vacant_Seat):
                 No_Vacant_Seat.append(i["席番号"])
         book.save(f'../log/Seat_{day_yearmonth}.xlsx')
         book.close()

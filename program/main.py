@@ -12,7 +12,7 @@ import importlib
 from tkinter import messagebox
 import sys
 
-height, length = JsonReader.Read_SeatDefault("./settings.json")
+height, length, Ignore_lists = JsonReader.Read_SeatDefault("./settings.json")
 
 pingfile = settings.pingfile
 
@@ -40,7 +40,17 @@ font_name = settings.font_name
 
 # 2次元配列のとおりに、gridでレイアウトを作成する
 
-LAYOUT = settings.LAYOUT
+# settings.LAYOUT
+
+LAYOUT = []
+for y in range(height):
+    tmp_mini_list = []
+    for x in range(length):
+        tmp_mini_list.append('-')
+    LAYOUT.append(tmp_mini_list)
+for tmp_btn in Ignore_lists:
+    if (0 <= tmp_btn['height'] and tmp_btn['height'] < height) and (0 <= tmp_btn['length'] and tmp_btn['length'] < length):
+        LAYOUT[tmp_btn['height']][tmp_btn['length']] = 'x'
 
 buttons = []
 
@@ -104,27 +114,22 @@ class Seat(ttk.Frame):  # リストボックスのクラス
         * 赤 : 席を使っています
         """, font=font0, anchor='e', justify='left')
         self.label0.grid(column=0, row=0, columnspan=5)
+
+
         # レイアウトの作成
+        btn_num = 0
         for y, row in enumerate(LAYOUT, 1):
             for x, char in enumerate(row):
                 if char != "x":
                     No_Vacant_Seat = SeatNumber.Open_book()
-                    if int(char) in No_Vacant_Seat:
-                        index = int(char) - 1
-                        buttons.append(ttk.Button(
-                            self, text=char, style='MyWidget2.TButton'))
-                        buttons[index].grid(
-                            column=x, row=y, sticky=(N, S, E, W))
-                        buttons[index].bind(
-                            '<Button-1>', func=self.click_option)
+                    if (btn_num + 1) in No_Vacant_Seat:
+                        buttons.append(ttk.Button(self, text= str(btn_num + 1), style='MyWidget2.TButton'))
                     else:
-                        index = int(char) - 1
-                        buttons.append(ttk.Button(
-                            self, text=char, style='MyWidget.TButton'))
-                        buttons[index].grid(
-                            column=x, row=y, sticky=(N, S, E, W))
-                        buttons[index].bind(
-                            '<Button-1>', func=self.click_option)
+                        buttons.append(ttk.Button(self, text= str(btn_num + 1), style='MyWidget.TButton'))
+                    buttons[btn_num].grid(column=x, row=y, sticky=(N, S, E, W))
+                    buttons[btn_num].bind('<Button-1>', func=self.click_option)
+                    btn_num += 1
+        
         self.grid(column=0, row=0, sticky=(N, S, E, W))
 
         # 横の引き伸ばし設定
@@ -150,6 +155,12 @@ class Seat(ttk.Frame):  # リストボックスのクラス
             label="生徒名簿", command=self.onOpenSettingStudentfile, accelerator="Ctrl+O")
         self.master.config(menu=menubar)
         self.bind_all("<Control-o>", self.onOpenSettingStudentfile)
+
+        # 座席表の設定
+        file_menu.add_command(
+            label="座席表", command=self.onOpenSettingSeat, accelerator="Ctrl+T")
+        self.master.config(menu=menubar)
+        self.bind_all("<Control-t>", self.onOpenSettingSeat)
 
         file_menu.add_command(
             label="終了", command=self.ExitApp, accelerator="Ctrl+F")
@@ -225,6 +236,47 @@ class Seat(ttk.Frame):  # リストボックスのクラス
         
         # ウィジェットの配置
         tree.pack()
+
+    def onOpenSettingSeat(self, event=None):
+        """座席表の設定"""
+        self.reload_modules()
+        self.dialog = Toplevel(self)
+        self.dialog.iconbitmap(settings.pythonLOGOICO)
+        self.dialog.title(f"座席表の設定")
+        self.dialog.geometry('400x300')
+        self.dialog.resizable(width=False, height=False)
+        # Bool_value, list_value, yearName = Sort_Students.load_studentlist(path)
+
+        # # 列の識別名を指定
+        # column = ('ID', 'SchoolYear')
+
+        # # Treeviewの生成
+        # tree = ttk.Treeview(self.dialog, columns=column)
+
+        # # 列の設定
+        # tree.column('#0',width=0, stretch='no')
+        # tree.column('ID', anchor='center', width=80)
+        # tree.column('SchoolYear',anchor='center', width=80)
+
+        # # 列の見出し設定
+        # tree.heading('#0',text='')
+        # tree.heading('ID', text='ID',anchor='center')
+        # tree.heading('SchoolYear', text='学年', anchor='center')
+
+        # if Bool_value:
+            
+        #     DicYear = JsonReader.Read_YearIDDefault("./settings.json")
+        #     t = 0
+        #     for i in DicYear.keys():
+        #         # レコードの追加
+        #         tree.insert(parent='', index='end', iid= t, values=(DicYear[i], i), tags = t)
+        #         if t & 1:
+        #             tree.tag_configure(t, background="#CCFFFF")
+
+        #         t += 1
+        
+        # # ウィジェットの配置
+        # tree.pack()
     
     def onOpenSettingAppID(self, event=None):
         """学年 ID"""
@@ -527,44 +579,20 @@ class Seat(ttk.Frame):  # リストボックスのクラス
                 detail=f"今日の勉強時間は {time} です。                     ")
 
 
-# スプラッシュスクリーン作成
-
-splash = Tk()
-splash.overrideredirect(1)  # スプラッシュ画面のタイトルバー非表示
-
-photo = PhotoImage(file=settings.pythonLOGO)  # 表示させたい画像ファイル指定
-
-splash_width = 800
-splash_height = 600
-splash_x = int(int(splash.winfo_screenwidth()/2) - int(splash_width/2))
-splash_y = int(int(splash.winfo_screenheight()/2) - int(splash_height/2))
-splash.geometry(f"{splash_width}x{splash_height}+{splash_x}+{splash_y}")
-
-canvas = Canvas(splash)  # 画像のサイズに合わせて幅と高さ調整
-canvas.pack(expand=True, fill=BOTH)
-canvas.update()
-canvas_width = canvas.winfo_width()
-canvas_height = canvas.winfo_height()
-canvas.create_image(canvas_width / 2, canvas_height /
-                    2, image=photo)
-
-
 def main():
-    splash.destroy()
     root = Tk()
-    root.overrideredirect(1)
+    # root.overrideredirect(1)
     root.title('座席表')
     root.geometry("1920x1080")
-    root.state("zoomed")
+    # root.state("zoomed")
     root.iconbitmap(settings.pythonLOGOICO)
     Seat(root)
 
-    s = ttk.Style()
-    s.theme_use('alt')
+    # s = ttk.Style()
+    # s.theme_use('alt')
 
     root.mainloop()
 
 
 if __name__ == '__main__':
-    splash.after(5000, main)
-    splash.mainloop()
+    main()
