@@ -170,6 +170,12 @@ class Seat(ttk.Frame):  # リストボックスのクラス
         self.master.config(menu=menubar)
         self.bind_all("<Control-i>", self.onOpenSettingID)
 
+        # AppID の設定
+        License_menu.add_command(
+            label="App ID", command=self.onOpenSettingAppID, accelerator="Ctrl+k")
+        self.master.config(menu=menubar)
+        self.bind_all("<Control-k>", self.onOpenSettingAppID)
+
     def ExitApp(self, event=None):
         check_Fin = messagebox.askyesno(
             title=f"アプリケーション終了",
@@ -185,6 +191,47 @@ class Seat(ttk.Frame):  # リストボックスのクラス
         self.dialog = Toplevel(self)
         self.dialog.iconbitmap(settings.pythonLOGOICO)
         self.dialog.title(f"学年 ID")
+        self.dialog.geometry('400x300')
+        self.dialog.resizable(width=False, height=False)
+        Bool_value, list_value, yearName = Sort_Students.load_studentlist(path)
+
+        # 列の識別名を指定
+        column = ('ID', 'SchoolYear')
+
+        # Treeviewの生成
+        tree = ttk.Treeview(self.dialog, columns=column)
+
+        # 列の設定
+        tree.column('#0',width=0, stretch='no')
+        tree.column('ID', anchor='center', width=80)
+        tree.column('SchoolYear',anchor='center', width=80)
+
+        # 列の見出し設定
+        tree.heading('#0',text='')
+        tree.heading('ID', text='ID',anchor='center')
+        tree.heading('SchoolYear', text='学年', anchor='center')
+
+        if Bool_value == True:
+            
+            DicYear = JsonReader.Read_YearIDDefault("./settings.json")
+            t = 0
+            for i in DicYear.keys():
+                # レコードの追加
+                tree.insert(parent='', index='end', iid= t, values=(DicYear[i], i), tags = t)
+                if t & 1:
+                    tree.tag_configure(t, background="#CCFFFF")
+
+                t += 1
+        
+        # ウィジェットの配置
+        tree.pack()
+    
+    def onOpenSettingAppID(self, event=None):
+        """学年 ID"""
+        self.reload_modules()
+        self.dialog = Toplevel(self)
+        self.dialog.iconbitmap(settings.pythonLOGOICO)
+        self.dialog.title(f"App ID")
         window_width = 350
         window_height = 700
         x = int(int(self.dialog.winfo_screenwidth()/2) - int(window_width/2))
@@ -193,21 +240,21 @@ class Seat(ttk.Frame):  # リストボックスのクラス
         self.dialog.geometry(f"{window_width}x{window_height}+{x}+{y}")
         self.dialog.resizable(width=False, height=False)
         self.dialog.grab_set()
-        Bool_value, list_value, yearName = Sort_Students.load_studentlist(path)
-        if Bool_value == True:
-            DicYear = JsonReader.Read_YearIDDefault("./settings.json")
-            font1 = font.Font(size=10, weight='bold')
-            self.labellist = []
-            t = 0
-            self.labellist.append(Label(self.dialog, text=f"""
-                現在の設定は以下になります。""", font=font1, anchor='e', justify='left'))
-            for i in DicYear.keys():
-                t = t + 1
-                self.labellist.append(Label(self.dialog, text=f"""
-                * {i} : {DicYear[i]}
-                """, font=font1, anchor='e', justify='left'))
-            for i in range(len(self.labellist)):
-                self.labellist[i].grid(column=0, row=i)
+        # Bool_value, list_value, yearName = Sort_Students.load_studentlist(path)
+        # if Bool_value == True:
+        #     DicYear = JsonReader.Read_YearIDDefault("./settings.json")
+        #     font1 = font.Font(size=10, weight='bold')
+        #     self.labellist = []
+        #     t = 0
+        #     self.labellist.append(Label(self.dialog, text=f"""
+        #         現在の設定は以下になります。""", font=font1, anchor='e', justify='left'))
+        #     for i in DicYear.keys():
+        #         t = t + 1
+        #         self.labellist.append(Label(self.dialog, text=f"""
+        #         * {i} : {DicYear[i]}
+        #         """, font=font1, anchor='e', justify='left'))
+        #     for i in range(len(self.labellist)):
+        #         self.labellist[i].grid(column=0, row=i)
 
     def onOpenLicense(self, event=None):
         """ライセンス"""
