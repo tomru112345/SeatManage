@@ -1,18 +1,5 @@
 # -*- coding:utf-8 -*-
 # デフォルトの設定を以下に記載する
-
-# 学生リスト
-student_list = []
-
-# コースのリスト
-course = []
-
-# 学年IDのリスト
-School_year_ID = []
-
-# ソートされた結果のリスト
-choose_list = []
-
 pingfile = '../image/capital_e.png'
 pythonLOGO = '../image/python_LOGO.png'
 pythonLOGOICO = '../image/python_LOGO.ico'
