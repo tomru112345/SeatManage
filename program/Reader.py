@@ -1,8 +1,6 @@
 import json
 import os
 import openpyxl
-from traitlets import Bool
-import settings
 
 class Reader():
     # 初期変数
@@ -83,7 +81,7 @@ class Reader():
                 json.dump(self.data, f, indent=4, ensure_ascii=False)
         pass
 
-    def ExcelRead(self) -> Bool:
+    def ExcelRead(self) -> bool:
         """Excel ファイルのロード"""
         if os.path.isfile(self.EXCEL_PATH):
             wb = openpyxl.load_workbook(self.EXCEL_PATH)

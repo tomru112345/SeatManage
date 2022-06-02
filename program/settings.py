@@ -1,4 +1,3 @@
-# -*- coding:utf-8 -*-
 # デフォルトの設定を以下に記載する
 pingfile = '../image/capital_e.png'
 pythonLOGO = '../image/python_LOGO.png'
