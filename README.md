@@ -1,26 +1,17 @@
 # 自習室管理アプリケーション
 
+## TODO リスト
+
+* [ ] GUI を HTML/CSS/JavaScript ベース(EEL モジュール使用)に置換する
+* [ ] 簡単に座席の配置を変更できるようにする
+* [ ] ログファイルの統合機能を追加する
+
 ## 環境構築
 
 pythonで実行する際、以下の環境が必要です
 
-```python
-pip install openpyxl
-```
-
-## 実行方法
-
-* python で実行する際
-
-```bash
-python ListBox_tk.py
-```
-
-* exe で実行する際
-  * 以下をクリックして実行
-
-```bash
-SeatManage.exe
+```sh
+pip install -r requirements.txt
 ```
 
 ## 主な仕様について
