@@ -3,8 +3,6 @@ pingfile = '../image/capital_e.png'
 pythonLOGO = '../image/python_LOGO.png'
 pythonLOGOICO = '../image/python_LOGO.ico'
 
-No_Vacant_Seat = []
-
 text_set = """
         学年, コース, カナ行を選んで 検索 のボタンを押してください。
         その後, 名前 を選んで 確定 のボタンを押してください。

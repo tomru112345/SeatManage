@@ -1,0 +1,7 @@
+cefpython3==66.1
+et-xmlfile==1.1.0
+openpyxl==3.0.10
+proxy-tools==0.1.0
+pycparser==2.21
+pythonnet==2.5.2
+pywebview==3.6.3

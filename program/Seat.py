@@ -3,7 +3,7 @@ import os
 import tkinter.filedialog
 from tkinter import font, ttk, messagebox
 import settings
-import SeatNumber
+import LogManager
 import Reader
 import importlib
 import sys
@@ -32,7 +32,7 @@ class Seat(ttk.Frame):  # リストボックスのクラス
     def reload_modules(self):
         """リロード"""
         importlib.reload(settings)
-        importlib.reload(SeatNumber)
+        importlib.reload(LogManager)
 
     def create_style(self):
         """ボタン、ラベルのスタイルを変更."""
@@ -86,7 +86,7 @@ class Seat(ttk.Frame):  # リストボックスのクラス
         for y, row in enumerate(self.READ_DATA.LAYOUT, 1):
             for x, char in enumerate(row):
                 if char != "x":
-                    No_Vacant_Seat = SeatNumber.Open_book()
+                    No_Vacant_Seat = LogManager.LogManager().Open()
                     if (btn_num + 1) in No_Vacant_Seat:
                         self.buttons.append(ttk.Button(self, text= str(btn_num + 1), style='MyWidget2.TButton'))
                     else:
@@ -472,7 +472,7 @@ class Seat(ttk.Frame):  # リストボックスのクラス
     def selectNAME(self, event):
         global choose_list, Select_Student, Select_Number, select_course, select_year
         self.reload_modules()
-        SeatNumber.New_day_book()
+        LogManager.LogManager().Create()
         # 選択されている数値インデックスを含むリストを取得
         itemIdxList = self.selectbox.curselection()
         if len(itemIdxList) == 1:
@@ -480,15 +480,14 @@ class Seat(ttk.Frame):  # リストボックスのクラス
             self.dialog.destroy()
             Select_Student = select_name
             (self.buttons[Select_Number - 1])['style'] = 'MyWidget2.TButton'
-            SeatNumber.append_time_in(
-                Select_Student, Select_Number, select_year, select_course)
+            LogManager.LogManager().LOG_Append(Select_Student, Select_Number, select_year, select_course)
 
     def OpenDialog(self):  # 席を開けるときのダイアログ
         # ウィジェットの作成、配置
         global Select_Number, Select_Student, time
 
         self.reload_modules()
-        Select_Student = SeatNumber.give_name(Select_Number)
+        Select_Student = LogManager.LogManager().give_name(Select_Number)
 
         check_Seat = messagebox.askyesno(
             title=f"{Select_Number}番の席",
@@ -498,7 +497,7 @@ class Seat(ttk.Frame):  # リストボックスのクラス
         if check_Seat:
             self.reload_modules()
             (self.buttons[Select_Number - 1])['style'] = 'MyWidget.TButton'
-            time = SeatNumber.leave_seat_time(Select_Student, Select_Number)
+            time = LogManager.LogManager().LOG_Leave(Select_Student, Select_Number)
             messagebox.showinfo(
                 title=f"{Select_Number}番の席",
                 message=f"{Select_Student} さん、お疲れ様でした。                     ",
