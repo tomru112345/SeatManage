@@ -2,11 +2,12 @@ import datetime
 import openpyxl
 import os
 
+
 class LogManager():
     def __init__(self) -> None:
         self.dict_DAY = {}
         self.LOGFILE = ""
-        
+
         # データを入れる
         self.SEAT = []
         self.Not_Available_Seat = []
@@ -35,7 +36,8 @@ class LogManager():
             book = openpyxl.load_workbook(self.LOGFILE)
             active_sheet = book.worksheets[0]
             active_sheet.title = f"{self.dict_DAY['Month']}月{self.dict_DAY['Day']}日"
-            active_sheet.append(["名前", "席番号", "日付", "入室時間", "退室時間", "学年", "コース"])
+            active_sheet.append(
+                ["名前", "席番号", "日付", "入室時間", "退室時間", "学年", "コース"])
             book.save(self.LOGFILE)
             book.close()
         pass
@@ -45,17 +47,19 @@ class LogManager():
         if os.path.isfile(self.LOGFILE):
             book = openpyxl.load_workbook(self.LOGFILE)
             if not f"{self.dict_DAY['Month']}月{self.dict_DAY['Day']}日" in book.sheetnames:
-                book.create_sheet(title = f"{self.dict_DAY['Month']}月{self.dict_DAY['Day']}日")
+                book.create_sheet(
+                    title=f"{self.dict_DAY['Month']}月{self.dict_DAY['Day']}日")
                 active_sheet = book[f"{self.dict_DAY['Month']}月{self.dict_DAY['Day']}日"]
-                active_sheet.append(["名前", "席番号", "日付", "入室時間", "退室時間", "学年", "コース"])
+                active_sheet.append(
+                    ["名前", "席番号", "日付", "入室時間", "退室時間", "学年", "コース"])
                 book.save(self.LOGFILE)
 
             active_sheet = book[f"{self.dict_DAY['Month']}月{self.dict_DAY['Day']}日"]
-            
+
             size = len(self.SEAT)
-            
+
             t = 0
-            
+
             for row in active_sheet.rows:
                 if row[0].row == 1:
                     # １行目
@@ -66,7 +70,7 @@ class LogManager():
                     # セルの値を「key-value」で登録
                     for k, v in zip(header_cells, row):  # zip 関数(forループで複数のリストの要素を取得)
                         row_dic[k.value] = v.value
-                    if t < size: # 何の条件分岐？
+                    if t < size:  # 何の条件分岐？
                         self.SEAT[t] = row_dic
                         t = t + 1
                     else:
@@ -80,11 +84,10 @@ class LogManager():
             book.close()
         return self.Not_Available_Seat
 
-
     def LOG_Append(self, name, number, year, course) -> None:  # 学年, コース追加
         self.time()
         if os.path.isfile(self.LOGFILE):
-            book = openpyxl.load_workbook(filename = self.LOGFILE)
+            book = openpyxl.load_workbook(filename=self.LOGFILE)
             active_sheet = book[f"{self.dict_DAY['Month']}月{self.dict_DAY['Day']}日"]
             active_sheet.append(
                 [
@@ -99,11 +102,10 @@ class LogManager():
             book.close()
         pass
 
-
     def LOG_Leave(self, name, number):
         self.time()
         if os.path.isfile(self.LOGFILE):
-            book = openpyxl.load_workbook(filename = self.LOGFILE)
+            book = openpyxl.load_workbook(filename=self.LOGFILE)
             active_sheet = book[f"{self.dict_DAY['Month']}月{self.dict_DAY['Day']}日"]
             size = len(self.SEAT)
             t = 0
@@ -145,11 +147,10 @@ class LogManager():
             book.close()
             return STUDY_TIME
 
-
     def give_name(self, number):
         self.time()
         if os.path.isfile(self.LOGFILE):
-            book = openpyxl.load_workbook(filename = self.LOGFILE)
+            book = openpyxl.load_workbook(filename=self.LOGFILE)
             active_sheet = book[f"{self.dict_DAY['Month']}月{self.dict_DAY['Day']}日"]
             size = len(self.SEAT)
             t = 0

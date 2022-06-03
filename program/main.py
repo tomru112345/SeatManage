@@ -4,12 +4,6 @@ import settings
 import tkinter
 
 
-def webView():
-    """TODO: webview を使用して GUI を作る"""
-    import webview
-    webview.create_window('Hello world', 'https://google.com')
-    webview.start(gui='cef')
-
 def main():
     root = tkinter.Tk()
     # root.overrideredirect(1)
@@ -20,7 +14,6 @@ def main():
     Seat.Seat(root)
     root.mainloop()
 
+
 if __name__ == '__main__':
     main()
-
-

@@ -8,6 +8,7 @@ import Reader
 import importlib
 import sys
 
+
 class Seat(ttk.Frame):  # リストボックスのクラス
 
     def __init__(self, master=None):
@@ -38,17 +39,18 @@ class Seat(ttk.Frame):  # リストボックスのクラス
         """ボタン、ラベルのスタイルを変更."""
         style = ttk.Style()
 
-        style_kind = ['winnative', 'clam', 'alt', 'default', 'classic', 'vista', 'xpnative']
+        style_kind = ['winnative', 'clam', 'alt',
+                      'default', 'classic', 'vista', 'xpnative']
         i = 2
 
         style.theme_use(style_kind[i])
         # ボタンのスタイルを上書き
         style.configure(
-            'MyWidget.TButton', 
+            'MyWidget.TButton',
             font=(
-                self.font_name, 
+                self.font_name,
                 20
-            ), 
+            ),
             background='#32CD32'
         )
 
@@ -80,7 +82,6 @@ class Seat(ttk.Frame):  # リストボックスのクラス
         """, font=font0, anchor='e', justify='left')
         self.label0.grid(column=0, row=0, columnspan=5)
 
-
         # レイアウトの作成
         btn_num = 0
         for y, row in enumerate(self.READ_DATA.LAYOUT, 1):
@@ -88,13 +89,17 @@ class Seat(ttk.Frame):  # リストボックスのクラス
                 if char != "x":
                     No_Vacant_Seat = LogManager.LogManager().Open()
                     if (btn_num + 1) in No_Vacant_Seat:
-                        self.buttons.append(ttk.Button(self, text= str(btn_num + 1), style='MyWidget2.TButton'))
+                        self.buttons.append(ttk.Button(self, text=str(
+                            btn_num + 1), style='MyWidget2.TButton'))
                     else:
-                        self.buttons.append(ttk.Button(self, text= str(btn_num + 1), style='MyWidget.TButton'))
-                    self.buttons[btn_num].grid(column=x, row=y, sticky=(N, S, E, W))
-                    self.buttons[btn_num].bind('<Button-1>', func=self.click_option)
+                        self.buttons.append(ttk.Button(self, text=str(
+                            btn_num + 1), style='MyWidget.TButton'))
+                    self.buttons[btn_num].grid(
+                        column=x, row=y, sticky=(N, S, E, W))
+                    self.buttons[btn_num].bind(
+                        '<Button-1>', func=self.click_option)
                     btn_num += 1
-        
+
         self.grid(column=0, row=0, sticky=(N, S, E, W))
 
         # 横の引き伸ばし設定
@@ -179,27 +184,28 @@ class Seat(ttk.Frame):  # リストボックスのクラス
         tree = ttk.Treeview(self.dialog, columns=column)
 
         # 列の設定
-        tree.column('#0',width=0, stretch='no')
+        tree.column('#0', width=0, stretch='no')
         tree.column('ID', anchor='center', width=80)
-        tree.column('SchoolYear',anchor='center', width=80)
+        tree.column('SchoolYear', anchor='center', width=80)
 
         # 列の見出し設定
-        tree.heading('#0',text='')
-        tree.heading('ID', text='ID',anchor='center')
+        tree.heading('#0', text='')
+        tree.heading('ID', text='ID', anchor='center')
         tree.heading('SchoolYear', text='学年', anchor='center')
 
         if Bool_value:
             t = 0
             for i in self.READ_DATA.DicYear.keys():
-            # for i in self.School_year.keys():
+                # for i in self.School_year.keys():
                 # レコードの追加
                 # tree.insert(parent='', index='end', iid= t, values=(self.School_year[i], i), tags = t)
-                tree.insert(parent='', index='end', iid= t, values=(self.READ_DATA.DicYear[i], i), tags = t)
+                tree.insert(parent='', index='end', iid=t, values=(
+                    self.READ_DATA.DicYear[i], i), tags=t)
                 if t & 1:
                     tree.tag_configure(t, background="#CCFFFF")
 
                 t += 1
-        
+
         # ウィジェットの配置
         tree.pack()
 
@@ -212,7 +218,6 @@ class Seat(ttk.Frame):  # リストボックスのクラス
         self.dialog.geometry('400x300')
         self.dialog.resizable(width=False, height=False)
 
-    
     def onOpenSettingAppID(self, event=None):
         """学年 ID"""
         self.reload_modules()
@@ -227,7 +232,6 @@ class Seat(ttk.Frame):  # リストボックスのクラス
         self.dialog.geometry(f"{window_width}x{window_height}+{x}+{y}")
         self.dialog.resizable(width=False, height=False)
         self.dialog.grab_set()
-    
 
     def onOpenLicense(self, event=None):
         """ライセンス"""
@@ -262,7 +266,7 @@ class Seat(ttk.Frame):  # リストボックスのクラス
             font=font1,
             anchor='e',
             justify='left'
-            )
+        )
 
         self.label1.grid(
             column=0,
@@ -270,24 +274,24 @@ class Seat(ttk.Frame):  # リストボックスのクラス
             columnspan=4,
             sticky=tkinter.EW,
             padx=5
-            )
+        )
 
         button_file = ttk.Button(
             self.dialog,
             text="開く",
             style="office2.TButton"
-            )
-            
+        )
+
         button_file.bind(
             '<Button-1>',
             func=self.file_dialog
-            )
+        )
 
         button_file.grid(
             column=4,
             row=0,
             sticky=tkinter.E
-            )
+        )
 
         self.label_name = Label(
             self.dialog,
@@ -296,7 +300,7 @@ class Seat(ttk.Frame):  # リストボックスのクラス
             """,
             font=font1,
             justify='left'
-            )
+        )
         self.label_name.grid(column=0, row=1)
 
         self.file_name = StringVar()
@@ -307,18 +311,18 @@ class Seat(ttk.Frame):  # リストボックスのクラス
             textvariable=self.file_name,
             font=font1,
             justify='left'
-            )
+        )
         self.label2.grid(column=1, row=1, columnspan=4)
 
         button_fin = ttk.Button(
             self.dialog,
             text="決定",
             style="office2.TButton"
-            )
+        )
         button_fin.bind(
             '<Button-1>',
             func=self.select_filename
-            )
+        )
         button_fin.grid(column=4, row=2)
 
     def file_dialog(self, event):
@@ -328,7 +332,7 @@ class Seat(ttk.Frame):  # リストボックスのクラス
         file_name = tkinter.filedialog.askopenfilename(
             filetypes=fTyp,
             initialdir=iDir
-            )
+        )
         if len(file_name) == 0:
             # self.file_name.set(self.StudentsListPath)
             self.file_name.set(self.READ_DATA.EXCEL_PATH)
@@ -458,16 +462,17 @@ class Seat(ttk.Frame):  # リストボックスのクラス
             self.selectbox.delete(0, self.selectbox.size())
 
         if len(itemIdxLists[0]) == 1:
-                select_course = self.course[itemIdxLists[0][0]]
-                select_year = self.year[itemIdxLists[1][0]]
-                kana_num = itemIdxLists[2][0]
-                Bool_value = self.READ_DATA.ExcelRead()
-                # self.READ_DATA.set_ListKeys()
-                self.READ_DATA.ExcelRead()
-                choose_list = self.READ_DATA.choose_CYname(select_course, select_year, kana_num)
-                # 末尾に選択された要素を追加する
-                for i in choose_list:
-                    self.selectbox.insert("end", i)
+            select_course = self.course[itemIdxLists[0][0]]
+            select_year = self.year[itemIdxLists[1][0]]
+            kana_num = itemIdxLists[2][0]
+            Bool_value = self.READ_DATA.ExcelRead()
+            # self.READ_DATA.set_ListKeys()
+            self.READ_DATA.ExcelRead()
+            choose_list = self.READ_DATA.choose_CYname(
+                select_course, select_year, kana_num)
+            # 末尾に選択された要素を追加する
+            for i in choose_list:
+                self.selectbox.insert("end", i)
 
     def selectNAME(self, event):
         global choose_list, Select_Student, Select_Number, select_course, select_year
@@ -480,7 +485,8 @@ class Seat(ttk.Frame):  # リストボックスのクラス
             self.dialog.destroy()
             Select_Student = select_name
             (self.buttons[Select_Number - 1])['style'] = 'MyWidget2.TButton'
-            LogManager.LogManager().LOG_Append(Select_Student, Select_Number, select_year, select_course)
+            LogManager.LogManager().LOG_Append(
+                Select_Student, Select_Number, select_year, select_course)
 
     def OpenDialog(self):  # 席を開けるときのダイアログ
         # ウィジェットの作成、配置
@@ -492,7 +498,7 @@ class Seat(ttk.Frame):  # リストボックスのクラス
         check_Seat = messagebox.askyesno(
             title=f"{Select_Number}番の席",
             message=f"{Select_Student} さん、この席を空けますか?                     "
-            )
+        )
 
         if check_Seat:
             self.reload_modules()

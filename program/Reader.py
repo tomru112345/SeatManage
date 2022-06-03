@@ -2,18 +2,19 @@ import json
 import os
 import openpyxl
 
+
 class Reader():
     # 初期変数
     def __init__(self) -> None:
         # ファイルの配置場所
         self.JSON_PATH = "./settings.json"
         self.EXCEL_PATH = "../生徒名簿.xlsx"
-        
+
         # エンコード形式
         self.EncodeItem = 'utf-8_sig'
-        
+
         self.data = None
-        
+
         self.HEIGHT = 7
         self.LENGTH = 5
         self.IgnoreLists = None
@@ -21,7 +22,7 @@ class Reader():
 
         # 学生リスト
         self.student_list = []
-        
+
         # コースのリスト
         self.COURSE = []
 
@@ -32,14 +33,14 @@ class Reader():
         self.School_year_ID = []
         self.student_list_keys = []
         self.LAYOUT = []
-        
+
         self.JsonRead()
         self.ExcelRead()
         pass
 
     def JsonRead(self) -> None:
         if os.path.isfile(self.JSON_PATH):
-            with open(self.JSON_PATH, 'r', encoding= self.EncodeItem) as f:
+            with open(self.JSON_PATH, 'r', encoding=self.EncodeItem) as f:
                 self.data = json.load(f)
                 self.EXCEL_PATH = self.data['FilePath']['StudentsListPath']
                 self.HEIGHT = int(self.data['SeatSettings']['height'])
@@ -47,7 +48,7 @@ class Reader():
                 self.IgnoreLists = self.data['SeatSettings']['IgnoreSeat']
                 for i in self.data['Year']:
                     self.DicYear[i] = self.data['Year'][i]
-                
+
                 # 2次元配列のとおりに、gridでレイアウトを作成する
                 for y in range(self.HEIGHT):
                     tmp_mini_list = []
@@ -72,12 +73,13 @@ class Reader():
             tmp_ignore_list = []
             if (len(self.IgnoreLists) > 0):
                 for tmp_item in self.IgnoreLists:
-                    tmp_ignore_dict = {"height": tmp_item['height'], "length": tmp_item['length']}
+                    tmp_ignore_dict = {
+                        "height": tmp_item['height'], "length": tmp_item['length']}
                     tmp_ignore_list.append(tmp_ignore_dict)
             self.data['SeatSettings']['IgnoreSeat'] = tmp_ignore_list
 
             # Pythonオブジェクトをファイル書き込み
-            with open(self.JSON_PATH, 'w', encoding= self.EncodeItem) as f:
+            with open(self.JSON_PATH, 'w', encoding=self.EncodeItem) as f:
                 json.dump(self.data, f, indent=4, ensure_ascii=False)
         pass
 
@@ -110,7 +112,8 @@ class Reader():
                                 row_dic[k.value] = v.value
                         self.student_list.append(row_dic)
 
-            self.student_list_keys = list(self.student_list[0].keys())  # Excel の表のキー取得
+            self.student_list_keys = list(
+                self.student_list[0].keys())  # Excel の表のキー取得
             for i in self.student_list:
                 t = str(i[self.student_list_keys[0]])
                 self.School_year_ID.append(t[0:2])
@@ -135,15 +138,15 @@ class Reader():
         kana_list = [
             ["ア", "イ", "ウ", "エ", "オ", "ｱ", "ｲ", "ｳ", "ｴ", "ｵ"],
             ["カ", "キ", "ク", "ケ", "コ", "ｶ", "ｷ", "ｸ", "ｹ", "ｺ",
-            "ガ", "ギ", "グ", "ゲ", "ゴ", "ｶﾞ", "ｷﾞ", "ｸﾞ", "ｹﾞ", "ｺﾞ"],
+             "ガ", "ギ", "グ", "ゲ", "ゴ", "ｶﾞ", "ｷﾞ", "ｸﾞ", "ｹﾞ", "ｺﾞ"],
             ["サ", "シ", "ス", "セ", "ソ", "ｻ", "ｼ", "ｽ", "ｾ", "ｿ",
-            "ザ", "ジ", "ズ", "ゼ", "ゾ", "ｻﾞ", "ｼﾞ", "ｽﾞ", "ｾﾞ", "ｿﾞ"],
+             "ザ", "ジ", "ズ", "ゼ", "ゾ", "ｻﾞ", "ｼﾞ", "ｽﾞ", "ｾﾞ", "ｿﾞ"],
             ["タ", "チ", "ツ", "テ", "ト", "ﾀ", "ﾁ", "ﾂ", "ﾃ", "ﾄ",
-            "ダ", "ヂ", "ヅ", "デ", "ド", "ﾀﾞ", "ﾁﾞ", "ﾂﾞ", "ﾃﾞ", "ﾄﾞ"],
+             "ダ", "ヂ", "ヅ", "デ", "ド", "ﾀﾞ", "ﾁﾞ", "ﾂﾞ", "ﾃﾞ", "ﾄﾞ"],
             ["ナ", "ニ", "ヌ", "ネ", "ノ", "ﾅ", "ﾆ", "ﾇ", "ﾈ", "ﾉ"],
             ["ハ", "ヒ", "フ", "ヘ", "ホ", "ﾊ", "ﾋ", "ﾌ", "ﾍ", "ﾎ",
-            "バ", "ビ", "ブ", "ベ", "ボ", "ﾊﾞ", "ﾋﾞ", "ﾌﾞ", "ﾍﾞ", "ﾎﾞ",
-            "パ", "ピ", "プ", "ペ", "ポ", "ﾊﾟ", "ﾋﾟ", "ﾌﾟ", "ﾍﾟ", "ﾎﾟ"],
+             "バ", "ビ", "ブ", "ベ", "ボ", "ﾊﾞ", "ﾋﾞ", "ﾌﾞ", "ﾍﾞ", "ﾎﾞ",
+             "パ", "ピ", "プ", "ペ", "ポ", "ﾊﾟ", "ﾋﾟ", "ﾌﾟ", "ﾍﾟ", "ﾎﾟ"],
             ["マ", "ミ", "ム", "メ", "モ", "ﾏ", "ﾐ", "ﾑ", "ﾒ", "ﾓ"],
             ["ヤ", "ユ", "ヨ", "ﾔ", "ﾕ", "ﾖ"],
             ["ラ", "リ", "ル", "レ", "ロ", "ﾗ", "ﾘ", "ﾙ", "ﾚ", "ﾛ"],
@@ -159,4 +162,3 @@ class Reader():
         choose_list = list(set(choose_list))
         choose_list = sorted(choose_list)
         return choose_list
-    
