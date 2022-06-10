@@ -1,5 +1,5 @@
 #!python3.8
-import Seat
+import seat
 import settings
 import tkinter
 
@@ -11,7 +11,7 @@ def main():
     root.geometry("1920x1080")
     # root.state("zoomed")
     root.iconbitmap(settings.pythonLOGOICO)
-    Seat.Seat(root)
+    seat.Seat(root)
     root.mainloop()
 
 

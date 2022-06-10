@@ -4,7 +4,7 @@ import os
 
 
 class LogManager():
-    def __init__(self) -> None:
+    def __init__(self):
         self.dict_DAY = {}
         self.LOGFILE = ""
 
@@ -46,7 +46,7 @@ class LogManager():
         self.time()
         if os.path.isfile(self.LOGFILE):
             book = openpyxl.load_workbook(self.LOGFILE)
-            if not f"{self.dict_DAY['Month']}月{self.dict_DAY['Day']}日" in book.sheetnames:
+            if not (f"{self.dict_DAY['Month']}月{self.dict_DAY['Day']}日" in book.sheetnames):
                 book.create_sheet(
                     title=f"{self.dict_DAY['Month']}月{self.dict_DAY['Day']}日")
                 active_sheet = book[f"{self.dict_DAY['Month']}月{self.dict_DAY['Day']}日"]
@@ -78,7 +78,7 @@ class LogManager():
             self.Not_Available_Seat = []
 
             for i in self.SEAT:
-                if (i["退室時間"] == None) and (not i["席番号"] in self.Not_Available_Seat):
+                if (i["退室時間"] is None) and not (i["席番号"] in self.Not_Available_Seat):
                     self.Not_Available_Seat.append(i["席番号"])
             book.save(self.LOGFILE)
             book.close()

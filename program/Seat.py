@@ -1,10 +1,10 @@
-from tkinter import *
+import tkinter
 import os
 import tkinter.filedialog
 from tkinter import font, ttk, messagebox
 import settings
-import LogManager
-import Reader
+import logmanager
+import reader
 import importlib
 import sys
 
@@ -22,7 +22,7 @@ class Seat(ttk.Frame):  # リストボックスのクラス
         self.select_year = ""
         self.time = ""
 
-        self.READ_DATA = Reader.Reader()
+        self.READ_DATA = reader.Reader()
         self.font_name = settings.font_name
 
         self.buttons = []
@@ -33,7 +33,7 @@ class Seat(ttk.Frame):  # リストボックスのクラス
     def reload_modules(self):
         """リロード"""
         importlib.reload(settings)
-        importlib.reload(LogManager)
+        importlib.reload(logmanager)
 
     def create_style(self):
         """ボタン、ラベルのスタイルを変更."""
@@ -87,7 +87,7 @@ class Seat(ttk.Frame):  # リストボックスのクラス
         for y, row in enumerate(self.READ_DATA.LAYOUT, 1):
             for x, char in enumerate(row):
                 if char != "x":
-                    No_Vacant_Seat = LogManager.LogManager().Open()
+                    No_Vacant_Seat = logmanager.LogManager().Open()
                     if (btn_num + 1) in No_Vacant_Seat:
                         self.buttons.append(ttk.Button(self, text=str(
                             btn_num + 1), style='MyWidget2.TButton'))
@@ -95,12 +95,13 @@ class Seat(ttk.Frame):  # リストボックスのクラス
                         self.buttons.append(ttk.Button(self, text=str(
                             btn_num + 1), style='MyWidget.TButton'))
                     self.buttons[btn_num].grid(
-                        column=x, row=y, sticky=(N, S, E, W))
+                        column=x, row=y, sticky=(tkinter.N, tkinter.S, tkinter.E, tkinter.W))
                     self.buttons[btn_num].bind(
                         '<Button-1>', func=self.click_option)
                     btn_num += 1
 
-        self.grid(column=0, row=0, sticky=(N, S, E, W))
+        self.grid(column=0, row=0, sticky=(
+            tkinter.N, tkinter.S, tkinter.E, tkinter.W))
 
         # 横の引き伸ばし設定
         for i in range(self.READ_DATA.LENGTH):
@@ -116,8 +117,8 @@ class Seat(ttk.Frame):  # リストボックスのクラス
         self.master.rowconfigure(0, weight=1)
 
         # menubarの大元（コンテナ）の作成と設置
-        menubar = Menu(self)
-        file_menu = Menu(menubar, tearoff=0)
+        menubar = tkinter.Menu(self)
+        file_menu = tkinter.Menu(menubar, tearoff=0)
         menubar.add_cascade(label="設定", menu=file_menu)
 
         # 生徒名簿の設定
@@ -138,7 +139,7 @@ class Seat(ttk.Frame):  # リストボックスのクラス
         self.bind_all("<Control-f>", self.ExitApp)
 
         # ライセンス表示
-        License_menu = Menu(menubar, tearoff=0)
+        License_menu = tkinter.Menu(menubar, tearoff=0)
         menubar.add_cascade(label="表示", menu=License_menu)
         License_menu.add_command(
             label="ライセンス", command=self.onOpenLicense, accelerator="Ctrl+L")
@@ -159,8 +160,8 @@ class Seat(ttk.Frame):  # リストボックスのクラス
 
     def ExitApp(self, event=None):
         check_Fin = messagebox.askyesno(
-            title=f"アプリケーション終了",
-            message=f"アプリケーションを終了しますか？")
+            title="アプリケーション終了",
+            message="アプリケーションを終了しますか？")
 
         if check_Fin:
             self.reload_modules()
@@ -169,9 +170,9 @@ class Seat(ttk.Frame):  # リストボックスのクラス
     def onOpenSettingID(self, event=None):
         """学年 ID"""
         self.reload_modules()
-        self.dialog = Toplevel(self)
+        self.dialog = tkinter.Toplevel(self)
         self.dialog.iconbitmap(settings.pythonLOGOICO)
-        self.dialog.title(f"学年 ID")
+        self.dialog.title("学年 ID")
         self.dialog.geometry('400x300')
         self.dialog.resizable(width=False, height=False)
         # Bool_value, self.student_list, yearName = SortStudents.load_studentlist(self.path)
@@ -212,23 +213,26 @@ class Seat(ttk.Frame):  # リストボックスのクラス
     def onOpenSettingSeat(self, event=None):
         """座席表の設定"""
         self.reload_modules()
-        self.dialog = Toplevel(self)
+        self.dialog = tkinter.Toplevel(self)
         self.dialog.iconbitmap(settings.pythonLOGOICO)
-        self.dialog.title(f"座席表の設定")
+        self.dialog.title("座席表の設定")
         self.dialog.geometry('400x300')
         self.dialog.resizable(width=False, height=False)
 
     def onOpenSettingAppID(self, event=None):
         """学年 ID"""
         self.reload_modules()
-        self.dialog = Toplevel(self)
+        self.dialog = tkinter.Toplevel(self)
         self.dialog.iconbitmap(settings.pythonLOGOICO)
-        self.dialog.title(f"App ID")
+        self.dialog.title("App ID")
         window_width = 350
         window_height = 700
-        x = int(int(self.dialog.winfo_screenwidth()/2) - int(window_width/2))
-        y = int(int(self.dialog.winfo_screenheight()/2) -
-                int(window_height/2))
+        x = int(
+            int(self.dialog.winfo_screenwidth() / 2) - int(window_width / 2)
+        )
+        y = int(
+            int(self.dialog.winfo_screenheight() / 2) - int(window_height / 2)
+        )
         self.dialog.geometry(f"{window_width}x{window_height}+{x}+{y}")
         self.dialog.resizable(width=False, height=False)
         self.dialog.grab_set()
@@ -245,24 +249,25 @@ class Seat(ttk.Frame):  # リストボックスのクラス
         # リロード
         self.reload_modules()
 
-        self.dialog = Toplevel(self)
+        self.dialog = tkinter.Toplevel(self)
         self.dialog.iconbitmap(settings.pythonLOGOICO)
-        self.dialog.title(f"生徒名簿の設定")
+        self.dialog.title("生徒名簿の設定")
         window_width = 480
         window_height = 150
-        x = int(int(self.dialog.winfo_screenwidth()/2) - int(window_width/2))
-        y = int(int(self.dialog.winfo_screenheight()/2) -
-                int(window_height/2))
+        x = int(
+            int(self.dialog.winfo_screenwidth() / 2) - int(window_width / 2)
+        )
+        y = int(
+            int(self.dialog.winfo_screenheight() / 2) - int(window_height / 2)
+        )
         self.dialog.geometry(f"{window_width}x{window_height}+{x}+{y}")
         self.dialog.resizable(width=False, height=False)
         self.dialog.grab_set()
 
         font1 = font.Font(family=self.font_name, size=10, weight='bold')
-        self.label1 = Label(
+        self.label1 = tkinter.Label(
             self.dialog,
-            text=f"""
-            生徒名簿の Excel ファイルを指定してください。
-            """,
+            text="生徒名簿の Excel ファイルを指定してください。",
             font=font1,
             anchor='e',
             justify='left'
@@ -293,20 +298,18 @@ class Seat(ttk.Frame):  # リストボックスのクラス
             sticky=tkinter.E
         )
 
-        self.label_name = Label(
+        self.label_name = tkinter.Label(
             self.dialog,
-            text=f"""
-            選択ファイル名:
-            """,
+            text="選択ファイル名:",
             font=font1,
             justify='left'
         )
         self.label_name.grid(column=0, row=1)
 
-        self.file_name = StringVar()
+        self.file_name = tkinter.StringVar()
         # self.file_name.set(self.StudentsListPath)
         self.file_name.set(self.READ_DATA.EXCEL_PATH)
-        self.label2 = Label(
+        self.label2 = tkinter.Label(
             self.dialog,
             textvariable=self.file_name,
             font=font1,
@@ -341,7 +344,7 @@ class Seat(ttk.Frame):  # リストボックスのクラス
 
     def select_filename(self, event):
         """生徒名簿ファイル選択結果の更新を行う関数"""
-        filename = self.file_name.get()
+        # filename = self.file_name.get()
         self.READ_DATA.JsonWrite()
         self.dialog.destroy()
 
@@ -365,14 +368,14 @@ class Seat(ttk.Frame):  # リストボックスのクラス
             # course = SortStudents.setlist_course(self.student_list, settings.course)
 
             self.reload_modules()
-            self.dialog = Toplevel(self)
+            self.dialog = tkinter.Toplevel(self)
             self.dialog.iconbitmap(settings.pythonLOGOICO)
             self.dialog.title("生徒リスト")
             window_width = 960
             window_height = 960
-            x = int(int(self.dialog.winfo_screenwidth()/2) - int(window_width/2))
-            y = int(int(self.dialog.winfo_screenheight()/2) -
-                    int(window_height/2))
+            x = int(
+                int(self.dialog.winfo_screenwidth() / 2) - int(window_width / 2)
+            )
             self.dialog.geometry(f"{window_width}x{window_height}+{x}+{0}")
             self.dialog.grab_set()
 
@@ -386,66 +389,75 @@ class Seat(ttk.Frame):  # リストボックスのクラス
                 self.dialog.rowconfigure(i, weight=1)
 
             font1 = font.Font(family=self.font_name, size=15, weight='bold')
-            self.label1 = Label(self.dialog, text=settings.text_set,
-                                font=font1, anchor='e', justify='left')
+            self.label1 = tkinter.Label(self.dialog, text=settings.text_set,
+                                        font=font1, anchor='e', justify='left')
             self.label1.grid(column=0, row=0, columnspan=3)
 
             font2 = font.Font(family=self.font_name, size=15, weight='bold')
-            self.label2 = Label(self.dialog, text="学年", font=font2)
-            self.label2.grid(column=0, row=1, sticky=W + E + N + S)
+            self.label2 = tkinter.Label(self.dialog, text="学年", font=font2)
+            self.label2.grid(column=0, row=1,
+                             sticky=tkinter.W + tkinter.E + tkinter.N + tkinter.S)
 
             font3 = font.Font(family=self.font_name, size=15, weight='bold')
-            self.label3 = Label(self.dialog, text="コース", font=font3)
-            self.label3.grid(column=1, row=1, sticky=W + E + N + S)
+            self.label3 = tkinter.Label(self.dialog, text="コース", font=font3)
+            self.label3.grid(column=1, row=1,
+                             sticky=tkinter.W + tkinter.E + tkinter.N + tkinter.S)
 
-            self.label3 = Label(self.dialog, text="カナ行", font=font3)
-            self.label3.grid(column=2, row=1, sticky=W + E + N + S)
+            self.label3 = tkinter.Label(self.dialog, text="カナ行", font=font3)
+            self.label3.grid(column=2, row=1,
+                             sticky=tkinter.W + tkinter.E + tkinter.N + tkinter.S)
 
             # self.year = self.yearName  # 学年リスト
             self.year = self.READ_DATA.yearName
-            self.yearname = StringVar(value=self.year)  # 文字列を保持させる
-            selectyearname = StringVar()  # 文字列を保持させる
+            self.yearname = tkinter.StringVar(value=self.year)  # 文字列を保持させる
+            selectyearname = tkinter.StringVar()  # 文字列を保持させる
 
-            self.listyearbox = Listbox(self.dialog, listvariable=self.yearname, height=7, exportselection=0, font=(
+            self.listyearbox = tkinter.Listbox(self.dialog, listvariable=self.yearname, height=7, exportselection=0, font=(
                 self.font_name, 15, "bold"))  # リストボックスに追加
-            self.listyearbox.grid(column=0, row=2, sticky=W + E + N + S)
+            self.listyearbox.grid(
+                column=0, row=2, sticky=tkinter.W + tkinter.E + tkinter.N + tkinter.S)
 
             # self.course = course  # コースリスト
             self.course = self.READ_DATA.COURSE
-            coursename = StringVar(value=self.course)  # 文字列を保持させる
+            coursename = tkinter.StringVar(value=self.course)  # 文字列を保持させる
 
-            self.listcoursebox = Listbox(self.dialog, listvariable=coursename, height=7, exportselection=0, font=(
+            self.listcoursebox = tkinter.Listbox(self.dialog, listvariable=coursename, height=7, exportselection=0, font=(
                 self.font_name, 15, "bold"))  # リストボックスに追加
-            self.listcoursebox.grid(column=1, row=2, sticky=W + E + N + S)
+            self.listcoursebox.grid(
+                column=1, row=2, sticky=tkinter.W + tkinter.E + tkinter.N + tkinter.S)
 
             self.kana = ["ア行", "カ行", "サ行", "タ行", "ナ行",
                          "ハ行", "マ行", "ヤ行", "ラ行", "ワ行"]  # コースリスト
-            kana = StringVar(value=self.kana)  # 文字列を保持させる
+            kana = tkinter.StringVar(value=self.kana)  # 文字列を保持させる
 
-            self.listkanabox = Listbox(self.dialog, listvariable=kana, height=7, exportselection=0, font=(
+            self.listkanabox = tkinter.Listbox(self.dialog, listvariable=kana, height=7, exportselection=0, font=(
                 self.font_name, 15, "bold"))  # リストボックスに追加
-            self.listkanabox.grid(column=2, row=2, sticky=W + E + N + S)
+            self.listkanabox.grid(
+                column=2, row=2, sticky=tkinter.W + tkinter.E + tkinter.N + tkinter.S)
 
             button_1 = ttk.Button(self.dialog, text="検索", padding=[
                                   330, 20, 330, 20], style='office.TButton')
             button_1.bind('<Button-1>', func=self.selectCY)
-            button_1.grid(column=0, row=3, sticky=W + E + N + S, columnspan=3)
+            button_1.grid(column=0, row=3,
+                          sticky=tkinter.W + tkinter.E + tkinter.N + tkinter.S, columnspan=3)
 
             font4 = font.Font(family=self.font_name, size=15, weight='bold')
-            self.label4 = Label(self.dialog, text="名前一覧", font=font4)
-            self.label4.grid(column=1, row=4, sticky=W + E + N + S)
+            self.label4 = tkinter.Label(self.dialog, text="名前一覧", font=font4)
+            self.label4.grid(column=1, row=4,
+                             sticky=tkinter.W + tkinter.E + tkinter.N + tkinter.S)
 
-            self.selectbox = Listbox(self.dialog, listvariable=selectyearname,
-                                     height=15, exportselection=0, font=(self.font_name, 15, "bold"))
+            self.selectbox = tkinter.Listbox(self.dialog, listvariable=selectyearname,
+                                             height=15, exportselection=0, font=(self.font_name, 15, "bold"))
             self.selectbox.grid(
-                column=0, row=5, columnspan=3, sticky=W + E + N + S)
+                column=0, row=5, columnspan=3, sticky=tkinter.W + tkinter.E + tkinter.N + tkinter.S)
 
-            button_2 = ttk.Button(self.dialog, text="確定",  padding=[
+            button_2 = ttk.Button(self.dialog, text="確定", padding=[
                                   330, 20, 330, 20], style='office.TButton')
             button_2.bind('<Button-1>', func=self.selectNAME)
-            button_2.grid(column=0, row=6, sticky=W + E + N + S, columnspan=3)
+            button_2.grid(column=0, row=6,
+                          sticky=tkinter.W + tkinter.E + tkinter.N + tkinter.S, columnspan=3)
 
-        elif Bool_value == False:
+        elif not Bool_value:
             self.reload_modules()
             messagebox.showerror('ファイル参照エラー', '生徒の名簿ファイルが正しくありません')
 
@@ -465,7 +477,7 @@ class Seat(ttk.Frame):  # リストボックスのクラス
             select_course = self.course[itemIdxLists[0][0]]
             select_year = self.year[itemIdxLists[1][0]]
             kana_num = itemIdxLists[2][0]
-            Bool_value = self.READ_DATA.ExcelRead()
+            self.READ_DATA.ExcelRead()
             # self.READ_DATA.set_ListKeys()
             self.READ_DATA.ExcelRead()
             choose_list = self.READ_DATA.choose_CYname(
@@ -477,7 +489,7 @@ class Seat(ttk.Frame):  # リストボックスのクラス
     def selectNAME(self, event):
         global choose_list, Select_Student, Select_Number, select_course, select_year
         self.reload_modules()
-        LogManager.LogManager().Create()
+        logmanager.LogManager().Create()
         # 選択されている数値インデックスを含むリストを取得
         itemIdxList = self.selectbox.curselection()
         if len(itemIdxList) == 1:
@@ -485,7 +497,7 @@ class Seat(ttk.Frame):  # リストボックスのクラス
             self.dialog.destroy()
             Select_Student = select_name
             (self.buttons[Select_Number - 1])['style'] = 'MyWidget2.TButton'
-            LogManager.LogManager().LOG_Append(
+            logmanager.LogManager().LOG_Append(
                 Select_Student, Select_Number, select_year, select_course)
 
     def OpenDialog(self):  # 席を開けるときのダイアログ
@@ -493,7 +505,7 @@ class Seat(ttk.Frame):  # リストボックスのクラス
         global Select_Number, Select_Student, time
 
         self.reload_modules()
-        Select_Student = LogManager.LogManager().give_name(Select_Number)
+        Select_Student = logmanager.LogManager().give_name(Select_Number)
 
         check_Seat = messagebox.askyesno(
             title=f"{Select_Number}番の席",
@@ -503,7 +515,7 @@ class Seat(ttk.Frame):  # リストボックスのクラス
         if check_Seat:
             self.reload_modules()
             (self.buttons[Select_Number - 1])['style'] = 'MyWidget.TButton'
-            time = LogManager.LogManager().LOG_Leave(Select_Student, Select_Number)
+            time = logmanager.LogManager().LOG_Leave(Select_Student, Select_Number)
             messagebox.showinfo(
                 title=f"{Select_Number}番の席",
                 message=f"{Select_Student} さん、お疲れ様でした。                     ",

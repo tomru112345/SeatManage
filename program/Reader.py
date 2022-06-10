@@ -5,7 +5,7 @@ import openpyxl
 
 class Reader():
     # 初期変数
-    def __init__(self) -> None:
+    def __init__(self):
         # ファイルの配置場所
         self.JSON_PATH = "./settings.json"
         self.EXCEL_PATH = "../生徒名簿.xlsx"
