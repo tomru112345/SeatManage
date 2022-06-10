@@ -6,6 +6,11 @@
 * [ ] 簡単に座席の配置を変更できるようにする
 * [ ] ログファイルの統合機能を追加する
 
+## 参考資料
+
+* [【実用】WindowsのPythonからSQLiteを使う](https://resanaplaza.com/2021/06/22/%E3%80%90%E5%AE%9F%E7%94%A8%E3%80%91windows%E3%81%AEpython%E3%81%8B%E3%82%89sqlite%E3%82%92%E4%BD%BF%E3%81%86/)
+* [python - データベースをexeファイルに含めることができません](https://tutorialmore.com/questions-1575746.htm)
+
 ## 環境構築
 
 pythonで実行する際、以下の環境が必要です
