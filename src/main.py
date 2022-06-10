@@ -1,4 +1,4 @@
-#!python3.8
+#!python3.10
 import seat
 import settings
 import tkinter
