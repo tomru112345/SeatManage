@@ -11,3 +11,5 @@ text_set = """
 License = "Copyright © 2001-2021 Python Software Foundation;\nAll Rights Reserved\nCopyright © 2021 Kazuma Tamura\nThis software is released under the MIT License\nsee https://opensource.org/licenses/MIT"
 
 font_name = 'Yu Gothic UI'
+
+room_list = ["W102", "W201"]
