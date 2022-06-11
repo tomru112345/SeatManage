@@ -1,7 +1,9 @@
 import tkinter
 import os
 import tkinter.filedialog
-from tkinter import font, ttk, messagebox
+import tkinter.ttk
+import tkinter.font
+import tkinter.messagebox
 import settings
 import logmanager
 import reader
@@ -9,7 +11,7 @@ import importlib
 import sys
 
 
-class Seat(ttk.Frame):  # リストボックスのクラス
+class Seat(tkinter.ttk.Frame):  # リストボックスのクラス
 
     def __init__(self, master=None):
         """初期化"""
@@ -37,7 +39,7 @@ class Seat(ttk.Frame):  # リストボックスのクラス
 
     def create_style(self):
         """ボタン、ラベルのスタイルを変更."""
-        style = ttk.Style()
+        style = tkinter.ttk.Style()
 
         style_kind = ['winnative', 'clam', 'alt',
                       'default', 'classic', 'vista', 'xpnative']
@@ -54,19 +56,19 @@ class Seat(ttk.Frame):  # リストボックスのクラス
             background='#32CD32'
         )
 
-        style2 = ttk.Style()
+        style2 = tkinter.ttk.Style()
         style2.theme_use(style_kind[i])
         # ボタンのスタイルを上書き
         style2.configure('office.TButton', font=(
             self.font_name, 20), background='#D3D3D3')
 
-        style3 = ttk.Style()
+        style3 = tkinter.ttk.Style()
         style3.theme_use(style_kind[i])
         # ボタンのスタイルを上書き
         style3.configure('MyWidget2.TButton', font=(
             self.font_name, 20), background='#DC143C')
 
-        style4 = ttk.Style()
+        style4 = tkinter.ttk.Style()
         style4.theme_use(style_kind[i])
         # ボタンのスタイルを上書き
         style4.configure('office2.TButton', font=(
@@ -74,8 +76,9 @@ class Seat(ttk.Frame):  # リストボックスのクラス
 
     def create_widgets(self):
         """席ボタンウィジェットの作成."""
-        font0 = font.Font(family=self.font_name, size=20, weight='bold')
-        self.label0 = ttk.Label(self, text="""
+        font0 = tkinter.font.Font(
+            family=self.font_name, size=20, weight='bold')
+        self.label0 = tkinter.ttk.Label(self, text="""
         自習室の希望する席を選んでください。
         * 緑 : 席が空いてます
         * 赤 : 席を使っています
@@ -89,10 +92,10 @@ class Seat(ttk.Frame):  # リストボックスのクラス
                 if char != "x":
                     No_Vacant_Seat = logmanager.LogManager().Open()
                     if (btn_num + 1) in No_Vacant_Seat:
-                        self.buttons.append(ttk.Button(self, text=str(
+                        self.buttons.append(tkinter.ttk.Button(self, text=str(
                             btn_num + 1), style='MyWidget2.TButton'))
                     else:
-                        self.buttons.append(ttk.Button(self, text=str(
+                        self.buttons.append(tkinter.ttk.Button(self, text=str(
                             btn_num + 1), style='MyWidget.TButton'))
                     self.buttons[btn_num].grid(
                         column=x, row=y, sticky=(tkinter.N, tkinter.S, tkinter.E, tkinter.W))
@@ -159,7 +162,7 @@ class Seat(ttk.Frame):  # リストボックスのクラス
         self.bind_all("<Control-k>", self.onOpenSettingAppID)
 
     def ExitApp(self, event=None):
-        check_Fin = messagebox.askyesno(
+        check_Fin = tkinter.messagebox.askyesno(
             title="アプリケーション終了",
             message="アプリケーションを終了しますか？")
 
@@ -182,7 +185,7 @@ class Seat(ttk.Frame):  # リストボックスのクラス
         column = ('ID', 'SchoolYear')
 
         # Treeviewの生成
-        tree = ttk.Treeview(self.dialog, columns=column)
+        tree = tkinter.ttk.Treeview(self.dialog, columns=column)
 
         # 列の設定
         tree.column('#0', width=0, stretch='no')
@@ -239,7 +242,7 @@ class Seat(ttk.Frame):  # リストボックスのクラス
 
     def onOpenLicense(self, event=None):
         """ライセンス"""
-        messagebox.showinfo(
+        tkinter.messagebox.showinfo(
             title="ライセンス",
             message="ライセンス",
             detail=settings.License)
@@ -264,7 +267,8 @@ class Seat(ttk.Frame):  # リストボックスのクラス
         self.dialog.resizable(width=False, height=False)
         self.dialog.grab_set()
 
-        font1 = font.Font(family=self.font_name, size=10, weight='bold')
+        font1 = tkinter.font.Font(
+            family=self.font_name, size=10, weight='bold')
         self.label1 = tkinter.Label(
             self.dialog,
             text="生徒名簿の Excel ファイルを指定してください。",
@@ -281,7 +285,7 @@ class Seat(ttk.Frame):  # リストボックスのクラス
             padx=5
         )
 
-        button_file = ttk.Button(
+        button_file = tkinter.ttk.Button(
             self.dialog,
             text="開く",
             style="office2.TButton"
@@ -317,7 +321,7 @@ class Seat(ttk.Frame):  # リストボックスのクラス
         )
         self.label2.grid(column=1, row=1, columnspan=4)
 
-        button_fin = ttk.Button(
+        button_fin = tkinter.ttk.Button(
             self.dialog,
             text="決定",
             style="office2.TButton"
@@ -388,17 +392,20 @@ class Seat(ttk.Frame):  # リストボックスのクラス
             for i in range(7):
                 self.dialog.rowconfigure(i, weight=1)
 
-            font1 = font.Font(family=self.font_name, size=15, weight='bold')
+            font1 = tkinter.font.Font(
+                family=self.font_name, size=15, weight='bold')
             self.label1 = tkinter.Label(self.dialog, text=settings.text_set,
                                         font=font1, anchor='e', justify='left')
             self.label1.grid(column=0, row=0, columnspan=3)
 
-            font2 = font.Font(family=self.font_name, size=15, weight='bold')
+            font2 = tkinter.font.Font(
+                family=self.font_name, size=15, weight='bold')
             self.label2 = tkinter.Label(self.dialog, text="学年", font=font2)
             self.label2.grid(column=0, row=1,
                              sticky=tkinter.W + tkinter.E + tkinter.N + tkinter.S)
 
-            font3 = font.Font(family=self.font_name, size=15, weight='bold')
+            font3 = tkinter.font.Font(
+                family=self.font_name, size=15, weight='bold')
             self.label3 = tkinter.Label(self.dialog, text="コース", font=font3)
             self.label3.grid(column=1, row=1,
                              sticky=tkinter.W + tkinter.E + tkinter.N + tkinter.S)
@@ -435,13 +442,14 @@ class Seat(ttk.Frame):  # リストボックスのクラス
             self.listkanabox.grid(
                 column=2, row=2, sticky=tkinter.W + tkinter.E + tkinter.N + tkinter.S)
 
-            button_1 = ttk.Button(self.dialog, text="検索", padding=[
-                                  330, 20, 330, 20], style='office.TButton')
+            button_1 = tkinter.ttk.Button(self.dialog, text="検索", padding=[
+                330, 20, 330, 20], style='office.TButton')
             button_1.bind('<Button-1>', func=self.selectCY)
             button_1.grid(column=0, row=3,
                           sticky=tkinter.W + tkinter.E + tkinter.N + tkinter.S, columnspan=3)
 
-            font4 = font.Font(family=self.font_name, size=15, weight='bold')
+            font4 = tkinter.font.Font(
+                family=self.font_name, size=15, weight='bold')
             self.label4 = tkinter.Label(self.dialog, text="名前一覧", font=font4)
             self.label4.grid(column=1, row=4,
                              sticky=tkinter.W + tkinter.E + tkinter.N + tkinter.S)
@@ -451,15 +459,15 @@ class Seat(ttk.Frame):  # リストボックスのクラス
             self.selectbox.grid(
                 column=0, row=5, columnspan=3, sticky=tkinter.W + tkinter.E + tkinter.N + tkinter.S)
 
-            button_2 = ttk.Button(self.dialog, text="確定", padding=[
-                                  330, 20, 330, 20], style='office.TButton')
+            button_2 = tkinter.ttk.Button(self.dialog, text="確定", padding=[
+                330, 20, 330, 20], style='office.TButton')
             button_2.bind('<Button-1>', func=self.selectNAME)
             button_2.grid(column=0, row=6,
                           sticky=tkinter.W + tkinter.E + tkinter.N + tkinter.S, columnspan=3)
 
         elif not Bool_value:
             self.reload_modules()
-            messagebox.showerror('ファイル参照エラー', '生徒の名簿ファイルが正しくありません')
+            tkinter.messagebox.showerror('ファイル参照エラー', '生徒の名簿ファイルが正しくありません')
 
     def selectCY(self, event):
         global choose_list, select_course, select_year
@@ -507,7 +515,7 @@ class Seat(ttk.Frame):  # リストボックスのクラス
         self.reload_modules()
         Select_Student = logmanager.LogManager().give_name(Select_Number)
 
-        check_Seat = messagebox.askyesno(
+        check_Seat = tkinter.messagebox.askyesno(
             title=f"{Select_Number}番の席",
             message=f"{Select_Student} さん、この席を空けますか?                     "
         )
@@ -516,7 +524,7 @@ class Seat(ttk.Frame):  # リストボックスのクラス
             self.reload_modules()
             (self.buttons[Select_Number - 1])['style'] = 'MyWidget.TButton'
             time = logmanager.LogManager().LOG_Leave(Select_Student, Select_Number)
-            messagebox.showinfo(
+            tkinter.messagebox.showinfo(
                 title=f"{Select_Number}番の席",
                 message=f"{Select_Student} さん、お疲れ様でした。                     ",
                 detail=f"今日の勉強時間は {time} です。                     ")
