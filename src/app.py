@@ -7,55 +7,90 @@ import settings
 
 
 class App(tkinter.Frame):
-    def __init__(self, master):
+    def __init__(self, master: tkinter.Tk):
         """初期化"""
         super().__init__(master)
+        # マスターの設定
+        self.master.geometry("1920x1080")
         self.master.state("zoomed")
         self.master.title("座席表マネージャ")
-        self.master.style = tkinter.ttk.Style()
-        self.setting_style()
 
-    def seating_chart(self):
+        # スタイルの設定
+        self.master.style = tkinter.ttk.Style()
+        self.set_style()
+
+        # タブのリスト
+        self.master.tabs = []
+
+        # ラベルのリスト
+        self.master.labels = []
+
+        # ボタンのリスト
+        self.master.buttons = []
+
+    def seating_chart(self) -> None:
         # Frame
-        top_frame = tkinter.ttk.Frame(self.master, style="TFrame")
+        # top_frame = tkinter.ttk.Frame(self.master, style="TFrame")
 
         # ノートブック
         notebook = tkinter.ttk.Notebook(self.master, style="TNotebook")
 
         # タブの作成
-        tab_list = []
         for _ in range(len(settings.room_list)):
-            tab_list.append(tkinter.ttk.Frame(notebook, style="TFrame"))
+            self.master.tabs.append(
+                tkinter.ttk.Frame(notebook, style="TFrame"))
 
         # 一番上のラベルの設定
-        label = []
-        label.append(tkinter.ttk.Label(top_frame, text="座席表", style="header.TLabel"))
+        # self.master.labels.append(tkinter.ttk.Label(
+        #     top_frame, text="座席表", style="header.TLabel"))
 
-        if len(tab_list) > 0:
+        if len(self.master.tabs) > 0:
             for i in range(len(settings.room_list)):
                 # notebookにタブを追加
-                notebook.add(tab_list[i], text=settings.room_list[i])
+                notebook.add(self.master.tabs[i], text=settings.room_list[i])
+
+                # ラベル用のフレームの作成
+                labels_frame = tkinter.ttk.Frame(
+                    self.master.tabs[i], style="TFrame")
+                # ボタン用のフレームの作成
+                bottoms_frame = tkinter.ttk.Frame(
+                    self.master.tabs[i], style="TFrame", relief="groove")
+
                 # タブの中のラベルの設定
-                label.append(tkinter.ttk.Label(
-                    tab_list[i], text=settings.room_list[i], style="h1.TLabel"))
+                self.master.labels.append(tkinter.ttk.Label(
+                    labels_frame, text=settings.room_list[i], style="h1.TLabel"))
+
+                # ボタンを作成
+                for tmp in range(3):
+                    self.master.buttons.append(
+                        tkinter.ttk.Button(bottoms_frame, text=str(tmp + 1), style="TButton"))
+
+                # ラベル用のフレームの作成
+                labels_frame.pack(fill=tkinter.BOTH, padx=10,
+                                  pady=10, side=tkinter.TOP)
+                # ボタン用フレームの配置
+                bottoms_frame.pack(expand=True, fill=tkinter.BOTH, padx=10,
+                                   pady=10, side=tkinter.BOTTOM)
 
             notebook.pack(expand=True, fill=tkinter.BOTH,
                           padx=10, pady=10, side=tkinter.BOTTOM)
         else:
             # error_frame
             error_frame = tkinter.ttk.Frame(self.master, style="TFrame")
-            label.append(tkinter.ttk.Label(
+            self.master.labels.append(tkinter.ttk.Label(
                 error_frame, text="座席表のデータが読み込めません", style="error.h1.TLabel"))
             # ウィジェットの配置
             error_frame.pack(expand=True, fill=tkinter.BOTH, padx=10,
                              pady=10, side=tkinter.BOTTOM)
 
         # ウィジェットの配置
-        top_frame.pack(fill=tkinter.BOTH, padx=10, pady=10)
-        for tmp in label:
+        # top_frame.pack(fill=tkinter.BOTH, padx=10, pady=10)
+        for tmp in self.master.labels:
+            tmp.pack()
+        for tmp in self.master.buttons:
             tmp.pack()
 
-    def setting_style(self):
+    def set_style(self) -> None:
         # スタイルの設定
         self.master.style.theme_use('clam')
 
@@ -101,6 +136,7 @@ class App(tkinter.Frame):
             font=("Meiryo", 30, "bold"),
             foreground="black",
             background="white",
+            side=tkinter.TOP
         )
 
         self.master.style.configure(
@@ -114,6 +150,30 @@ class App(tkinter.Frame):
         self.master.style.configure(
             "TFrame",
             background="white"
+        )
+
+        # Style
+        self.master.style.configure(
+            "TButton",
+            font=("Meiryo", 30, "bold"),
+            width=10,
+            background="medium spring green",
+            foreground="black",
+            justify=tkinter.CENTER
+        )
+
+        self.master.style.map(
+            "TButton",
+            foreground=[
+                ('active', 'white'),
+                ('disabled', 'gray'),
+                ('selected', 'blue'),
+            ],
+            background=[
+                ('active', 'SteelBlue1'),
+                ('disabled', 'black'),
+                ('selected', 'orange red'),
+            ],
         )
 
 
