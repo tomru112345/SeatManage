@@ -12,4 +12,4 @@ License = "Copyright © 2001-2021 Python Software Foundation;\nAll Rights Reserv
 
 font_name = 'Yu Gothic UI'
 
-room_list = ["W102", "W201"]
+room_list = ["本館 2 階", "本館 4 階"]
