@@ -60,11 +60,11 @@ class App(tkinter.Frame):
                 self.master.labels.append(tkinter.ttk.Label(
                     labels_frame[i], text=settings.room_list[i], style="h1.TLabel"))
                 self.master.labels.append(tkinter.ttk.Label(
-                    labels_frame[i], text="自習室の希望する席を選んでください", style="h2.TLabel"))
+                    labels_frame[i], text="自習室の希望する席を選んでください", style="p.bold.TLabel"))
                 self.master.labels.append(tkinter.ttk.Label(
-                    labels_frame[i], text="* 緑 : 席が空いてます", style="p.TLabel"))
+                    labels_frame[i], text="・ 緑 : 席が空いてます", style="p.TLabel"))
                 self.master.labels.append(tkinter.ttk.Label(
-                    labels_frame[i], text="* 赤 : 席を使っています", style="p.TLabel"))
+                    labels_frame[i], text="・ 赤 : 席を使っています", style="p.TLabel"))
 
                 # ラベル用のフレームの作成
                 labels_frame[i].pack(fill=tkinter.BOTH, padx=10,
@@ -88,7 +88,7 @@ class App(tkinter.Frame):
         self.create_buttons(bottoms_frame[0])
         # ウィジェットの配置
         for tmp in self.master.labels:
-            tmp.pack(fill=tkinter.BOTH)
+            tmp.pack(fill=tkinter.BOTH, padx=5, pady=5)
 
     def create_buttons(self, bottoms_frame: tkinter.ttk.Frame) -> None:
         # ボタンを作成
@@ -153,16 +153,24 @@ class App(tkinter.Frame):
         self.master.style.configure(
             "h1.TLabel",
             font=("Meiryo", 30, "bold"),
-            foreground="black",
-            background="white",
+            foreground="white",
+            background="SteelBlue2",
             side=tkinter.TOP
         )
 
         self.master.style.configure(
             "h2.TLabel",
             font=("Meiryo", 24, "bold"),
-            foreground="red",
-            background="white",
+            foreground="white",
+            background="indianred1",
+            side=tkinter.TOP
+        )
+
+        self.master.style.configure(
+            "h3.TLabel",
+            font=("Meiryo", 18, "bold"),
+            foreground="white",
+            background="MediumPurple1",
             side=tkinter.TOP
         )
 
@@ -170,6 +178,14 @@ class App(tkinter.Frame):
             "p.TLabel",
             font=("Meiryo", 15),
             foreground="black",
+            background="white",
+            side=tkinter.TOP
+        )
+
+        self.master.style.configure(
+            "p.bold.TLabel",
+            font=("Meiryo", 15, "bold"),
+            foreground="red",
             background="white",
             side=tkinter.TOP
         )
