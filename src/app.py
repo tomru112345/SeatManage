@@ -5,6 +5,7 @@ import tkinter.font
 import tkinter.messagebox
 import settings
 import logmanager
+import style
 import reader
 
 
@@ -19,7 +20,7 @@ class App(tkinter.Frame):
 
         # スタイルの設定
         self.master.style = tkinter.ttk.Style()
-        self.set_style()
+        style.set_style(self.master.style)
 
         # タブのリスト
         self.master.tabs = []
@@ -108,124 +109,6 @@ class App(tkinter.Frame):
         # 縦の引き伸ばし設定
         for i in range(self.READ_DATA.HEIGHT):
             bottoms_frame.rowconfigure(i, weight=1)
-
-    def set_style(self) -> None:
-        # スタイルの設定
-        self.master.style.theme_use('clam')
-
-        # Syle (TNotebook)
-        self.master.style.configure(
-            "TNotebook",
-            tabposition=tkinter.SW,
-        )
-        # Syle (TNotebook.Tab)
-        self.master.style.configure(
-            "TNotebook.Tab",
-            font=("Meiryo", 15, "bold"),
-            background="white",
-            foreground="black",
-            justify=tkinter.CENTER
-        )
-        # Style.map (TNotebook.Tab)
-        self.master.style.map(
-            "TNotebook.Tab",
-            foreground=[
-                ('active', 'white'),
-                ('disabled', 'gray'),
-                ('selected', 'blue'),
-            ],
-            background=[
-                ('active', 'darkorange'),
-                ('disabled', 'black'),
-                ('selected', 'white'),
-            ],
-        )
-
-        # Syle (TLabel)
-        self.master.style.configure(
-            "header.TLabel",
-            font=("Meiryo", 30, "bold"),
-            foreground="black",
-            background="white",
-            justify=tkinter.CENTER
-        )
-
-        self.master.style.configure(
-            "h1.TLabel",
-            font=("Meiryo", 30, "bold"),
-            foreground="white",
-            background="SteelBlue2",
-            side=tkinter.TOP
-        )
-
-        self.master.style.configure(
-            "h2.TLabel",
-            font=("Meiryo", 24, "bold"),
-            foreground="white",
-            background="indianred1",
-            side=tkinter.TOP
-        )
-
-        self.master.style.configure(
-            "h3.TLabel",
-            font=("Meiryo", 18, "bold"),
-            foreground="white",
-            background="MediumPurple1",
-            side=tkinter.TOP
-        )
-
-        self.master.style.configure(
-            "p.TLabel",
-            font=("Meiryo", 15),
-            foreground="black",
-            background="white",
-            side=tkinter.TOP
-        )
-
-        self.master.style.configure(
-            "p.bold.TLabel",
-            font=("Meiryo", 15, "bold"),
-            foreground="red",
-            background="white",
-            side=tkinter.TOP
-        )
-
-        self.master.style.configure(
-            "error.h1.TLabel",
-            font=("Meiryo", 30, "bold"),
-            foreground="red",
-            background="white",
-            justify=tkinter.CENTER
-        )
-
-        self.master.style.configure(
-            "TFrame",
-            background="white"
-        )
-
-        # Style
-        self.master.style.configure(
-            "TButton",
-            font=("Meiryo", 30, "bold"),
-            # width=10,
-            background="medium spring green",
-            foreground="black"
-            # justify=tkinter.CENTER
-        )
-
-        self.master.style.map(
-            "TButton",
-            foreground=[
-                ('active', 'white'),
-                ('disabled', 'gray'),
-                ('selected', 'blue'),
-            ],
-            background=[
-                ('active', 'SteelBlue1'),
-                ('disabled', 'black'),
-                ('selected', 'orange red'),
-            ],
-        )
 
 
 def main():
